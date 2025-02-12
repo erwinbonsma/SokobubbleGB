@@ -17,6 +17,8 @@ struct LevelSpec {
   const char* name;
   const GridSpec grid;
 
+  const GridPos startPos;
+
   const uint8_t numBoxes;
   const ObjectSpec* boxes;
   

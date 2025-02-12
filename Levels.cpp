@@ -26,6 +26,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
     .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesBubbles },
+    .startPos = GridPos(1, 1),
     .numBoxes = 2,
     .boxes = boxesBubbles,
     .numTargets = 2,
