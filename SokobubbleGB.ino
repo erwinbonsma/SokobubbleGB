@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Images.h"
 #include "Levels.h"
+#include "Palettes.h"
 
 UpdateFunction updateFunction;
 DrawFunction drawFunction;
@@ -25,6 +26,14 @@ void drawLevel(int levelIndex) {
       }
     }
   }
+
+  boxImage.setFrame(0);
+  for (int i = 0; i < spec.numBoxes; ++i) {
+    auto& obj = spec.boxes[i];
+    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, boxImage);
+  }
+  gb.display.colorIndex = PALETTE_DEFAULT;
 
   playerImage.setFrame(frameIndex);
   gb.display.drawImage(x0 + spec.startPos.x * 8, y0 + spec.startPos.y * 8, playerImage);
