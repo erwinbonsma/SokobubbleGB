@@ -13,7 +13,7 @@ const ObjectSpec boxesBubbles[] = {
   ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Blue },
   ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Red },
   ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Green }, // TEMP
-  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Yellow }, // TEMP
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Yellow }, // TEMP
 };
 const ObjectSpec targetsBubbles[] = {
   ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Any },
@@ -28,7 +28,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
     .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesBubbles },
-    .startPos = GridPos(1, 1),
+    .startPos = GridPos(1, 3),
     .numBoxes = 4,
     .boxes = boxesBubbles,
     .numTargets = 2,

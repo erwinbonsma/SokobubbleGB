@@ -27,12 +27,25 @@ void drawLevel(int levelIndex) {
     }
   }
 
+  for (int i = 0; i < spec.numTargets; ++i) {
+    auto& obj = spec.targets[i];
+    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, targetImage);
+  }
+
   boxImage.setFrame(0);
   for (int i = 0; i < spec.numBoxes; ++i) {
     auto& obj = spec.boxes[i];
     gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, boxImage);
   }
+
+  for (int i = 0; i < spec.numBubbles; ++i) {
+    auto& obj = spec.bubbles[i];
+    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
+  }
+
   gb.display.colorIndex = PALETTE_DEFAULT;
 
   playerImage.setFrame(frameIndex);
