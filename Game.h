@@ -10,7 +10,7 @@ enum class Direction : uint8_t {
   Left = 3,
 };
 
-int rotationAngle(Direction dir) { return static_cast<int>(dir) * 90; }
+inline int rotationAngle(Direction dir) { return static_cast<int>(dir) * 90; }
 
 class Box;
 class Player;
@@ -82,10 +82,12 @@ class Player {
 
   // Rotation angle, range [0, 360>
   int _rotation;
+  int _deltaRot = 0;
 
   ObjectColor _bubble;
 
-  int _frameIndex;
+  // Frame offset to animate caterpillar track
+  int _trackOffset;
 
   Move* _move;
   Move* _moveNext;
@@ -122,6 +124,8 @@ public:
 
   void init(GridPos pos, ObjectColor bubble = ObjectColor::None);
   void update();
+
+  void draw(int x0, int y0);
 };
 
 class Box {
@@ -138,20 +142,25 @@ public:
 
   ObjectColor color() const { return _color; }
   void moveStep(Direction dir);
+
+  void draw(int x0, int y0);
 };
 
 class Level {
-  LevelSpec& _spec;
+  const LevelSpec& _spec;
   Player _player;
   Box _boxes[maxBoxes];
   int _moveCount;
 
 public:
-  Level(LevelSpec& spec);
+  Level(const LevelSpec& spec);
 
   Box* boxAt(GridPos pos);
-  ObjectColor bubbleAt(GridPos pos);
-  bool isWall(GridPos pos);
+  ObjectColor bubbleAt(GridPos pos) const;
+  bool isWall(GridPos pos) const;
 
   void incMoveCount() { _moveCount++; }
+
+  void update();
+  void draw();
 };

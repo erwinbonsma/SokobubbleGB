@@ -4,6 +4,9 @@
 #undef max
 #include <algorithm>
 
+#include "Images.h"
+#include "Palettes.h"
+
 const Vector2D dirVectors[4] = {
   Vector2D(0, -1), Vector2D(1, 0), Vector2D(0, 1), Vector2D(-1, 0)
 };
@@ -80,13 +83,15 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
 void Player::init(GridPos pos, ObjectColor bubble) {
   _pos = Vector2D(pos.x * 8, pos.y * 8);
   _bubble = bubble;
+
+  _trackOffset = 0;
+  _move = nullptr;
+  _moveNext = nullptr;
 }
 
 Move* Player::getMove(Direction dir) {
   // Pick item from pool that is not currently used
   Move* mov = (_move == _movePool) ? _movePool + 1 : _movePool;
-  assertTrue(mov != _move);
-  assertTrue(mov != _moveNext);
 
   mov->init(dir);
 
@@ -147,14 +152,15 @@ Move* Player::checkMove(Move* move) {
 MoveAnimation* Player::startMove(Move* move) {
   _move = move;
 
-  MoveAnimation* anim = nullptr;
-  if (move->_blocked) {
-    anim = &_blockedMoveAnim;
-  } else if (move->_pushedBox) {
-    anim = &_pushMoveAnim;
-  } else {
-    anim = &_plainMoveAnim;
-  }
+  MoveAnimation* anim = &_plainMoveAnim;
+//  MoveAnimation* anim = nullptr;
+//  if (move->_blocked) {
+//    anim = &_blockedMoveAnim;
+//  } else if (move->_pushedBox) {
+//    anim = &_pushMoveAnim;
+//  } else {
+//    anim = &_plainMoveAnim;
+//  }
 
   anim->init();
 
@@ -205,6 +211,23 @@ void Player::update() {
   }
 }
 
+void Player::draw(int x0, int y0) {
+  int sector = (_rotation % 90 + 15) / 30;
+  int orientation = (_rotation % 180) / 90;
+
+  if (sector == 0 || sector == 3) {
+    // Sprite is horizontal or vertical
+    playerImage.setFrame(orientation * 5 + _trackOffset);
+  } else {
+    playerImage.setFrame(orientation * 5 + sector + 2);
+  }
+
+  gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
+
+  gb.display.setCursor(0, 0);
+  gb.display.printf("%d %d", _rotation, _deltaRot);
+}
+
 void Player::rotateTowards(int rotation) {
   int deltaRot = rotation - _rotation;
   if (deltaRot > 180) {
@@ -212,24 +235,27 @@ void Player::rotateTowards(int rotation) {
   } else if (deltaRot <= -180) {
     deltaRot += 360;
   }
+  assertTrue(deltaRot <= 180);
+  assertTrue(deltaRot > -180);
 
   deltaRot = std::min(std::max(deltaRot, -10), 10);
+  _deltaRot = deltaRot;
 
-  _rotation += deltaRot;
+  _rotation = (_rotation + deltaRot + 360) % 360;
 }
 
 void Player::moveForward(Direction dir) {
   auto v = dirVectors[static_cast<int>(dir)];
 
   _pos.add(v);
-  _frameIndex = (_frameIndex + v.x + v.y + 3) % 3;
+  _trackOffset = (_trackOffset + v.x + v.y + 3) % 3;
 }
 
 void Player::moveBackward(Direction dir) {
   auto v = dirVectors[static_cast<int>(dir)];
 
   _pos.sub(v);
-  _frameIndex = (_frameIndex - v.x - v.y + 3) % 3;
+  _trackOffset = (_trackOffset - v.x - v.y + 3) % 3;
 }
 
 void Box::init(GridPos pos, ObjectColor color) {
@@ -237,7 +263,18 @@ void Box::init(GridPos pos, ObjectColor color) {
   _color = color;
 }
 
-Level::Level(LevelSpec& spec)
+void Box::moveStep(Direction dir) {
+  _pos.add(dirVectors[static_cast<int>(dir)]);
+}
+
+void Box::draw(int x0, int y0) {
+  boxImage.setFrame(0);
+
+  gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(_color)]);
+  gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, boxImage);
+}
+
+Level::Level(const LevelSpec& spec)
 : _spec(spec)
 , _player(*this)
 {
@@ -258,7 +295,7 @@ Box* Level::boxAt(GridPos pos) {
   return nullptr;
 }
 
-ObjectColor Level::bubbleAt(GridPos pos) {
+ObjectColor Level::bubbleAt(GridPos pos) const {
   auto& bubbles = _spec.bubbles;
 
   for (int i = 0; i < _spec.numBubbles; ++i ) {
@@ -270,8 +307,48 @@ ObjectColor Level::bubbleAt(GridPos pos) {
   return ObjectColor::None;
 }
 
-bool Level::isWall(GridPos pos) {
+bool Level::isWall(GridPos pos) const {
   auto& grid = _spec.grid;
 
   return grid.tiles[pos.x + pos.y * grid.w] != 0;
+}
+
+void Level::update() {
+  _player.update();
+}
+
+void Level::draw() {
+  int x0 = 40 - _spec.grid.w * 4;
+  int y0 = 32 - _spec.grid.h * 4;
+
+  for (int y = 0; y < _spec.grid.h; ++y) {
+    int rowOffset = y * _spec.grid.w;
+    for (int x = 0; x < _spec.grid.w; ++x) {
+      int tileIndex = _spec.grid.tiles[x + rowOffset];
+      if (tileIndex > 0) {
+        wallsImage.setFrame(tileIndex - 1);
+        gb.display.drawImage(x0 + x * 8, y0 + y * 8, wallsImage);
+      }
+    }
+  }
+
+  for (int i = 0; i < _spec.numTargets; ++i) {
+    auto& obj = _spec.targets[i];
+    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, targetImage);
+  }
+
+  for (int i = 0; i < _spec.numBoxes; ++i) {
+    _boxes[i].draw(x0, y0);
+  }
+
+  for (int i = 0; i < _spec.numBubbles; ++i) {
+    auto& obj = _spec.bubbles[i];
+    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
+  }
+
+  gb.display.colorIndex = PALETTE_DEFAULT;
+
+  _player.draw(x0, y0);
 }
