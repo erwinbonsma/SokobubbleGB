@@ -122,6 +122,7 @@ int Player::checkBlocked(Move* move) {
     return 2;
   }
 
+  move->_pushedBox = box;
   return 0;
 }
 
@@ -134,13 +135,14 @@ Move* Player::checkMove(Move* move) {
     move->_srcBub = _bubble;
   }
 
+  move->_dstPos = move->_srcPos + dirVectors[static_cast<int>(move->_dir)];
+  move->_dstBub = _level.bubbleAt(move->_dstPos);
+
   move->_blocked = checkBlocked(move);
   if (move->_blocked) {
     move->_dstPos = move->_srcPos;
     move->_dstBub = move->_srcBub;
   } else {
-    move->_dstPos = move->_srcPos + dirVectors[static_cast<int>(move->_dir)];
-    move->_dstBub = _level.bubbleAt(move->_dstPos);
     if (move->_dstBub == ObjectColor::None) {
       move->_dstBub = move->_srcBub;
     }
@@ -152,15 +154,15 @@ Move* Player::checkMove(Move* move) {
 MoveAnimation* Player::startMove(Move* move) {
   _move = move;
 
-  MoveAnimation* anim = &_plainMoveAnim;
-//  MoveAnimation* anim = nullptr;
-//  if (move->_blocked) {
-//    anim = &_blockedMoveAnim;
-//  } else if (move->_pushedBox) {
-//    anim = &_pushMoveAnim;
-//  } else {
-//    anim = &_plainMoveAnim;
-//  }
+//  MoveAnimation* anim = &_plainMoveAnim;
+  MoveAnimation* anim = nullptr;
+  if (move->_blocked) {
+    anim = &_blockedMoveAnim;
+  } else if (move->_pushedBox) {
+    anim = &_pushMoveAnim;
+  } else {
+    anim = &_plainMoveAnim;
+  }
 
   anim->init();
 
@@ -178,6 +180,35 @@ MoveAnimation* Player::startMove(Move* move) {
   }
 
   return anim;
+}
+
+void Player::rotateTowards(int rotation) {
+  int deltaRot = rotation - _rotation;
+  if (deltaRot > 180) {
+    deltaRot -= 360;
+  } else if (deltaRot <= -180) {
+    deltaRot += 360;
+  }
+  assertTrue(deltaRot <= 180);
+  assertTrue(deltaRot > -180);
+
+  deltaRot = std::min(std::max(deltaRot, -10), 10);
+
+  _rotation = (_rotation + deltaRot + 360) % 360;
+}
+
+void Player::moveForward(Direction dir) {
+  auto v = dirVectors[static_cast<int>(dir)];
+
+  _pos.add(v);
+  _trackOffset = (_trackOffset + v.x + v.y + 3) % 3;
+}
+
+void Player::moveBackward(Direction dir) {
+  auto v = dirVectors[static_cast<int>(dir)];
+
+  _pos.sub(v);
+  _trackOffset = (_trackOffset - v.x - v.y + 3) % 3;
 }
 
 void Player::update() {
@@ -205,6 +236,10 @@ void Player::update() {
 
   if (_move) {
     if (_moveAnim->step(*this, *_move)) {
+      if (_move->_dstBub != _bubble) {
+        _bubble = _move->_dstBub;
+      }
+
       _move = nullptr;
       _moveAnim = nullptr;
     }
@@ -222,40 +257,15 @@ void Player::draw(int x0, int y0) {
     playerImage.setFrame(orientation * 5 + sector + 2);
   }
 
+  int palIdx = _bubble == ObjectColor::None ? 5 : static_cast<int>(_bubble);
+  gb.display.colorIndex = const_cast<Color *>(palettes[palIdx]);
   gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
+  gb.display.colorIndex = PALETTE_DEFAULT;
 
-  gb.display.setCursor(0, 0);
-  gb.display.printf("%d %d", _rotation, _deltaRot);
-}
-
-void Player::rotateTowards(int rotation) {
-  int deltaRot = rotation - _rotation;
-  if (deltaRot > 180) {
-    deltaRot -= 360;
-  } else if (deltaRot <= -180) {
-    deltaRot += 360;
-  }
-  assertTrue(deltaRot <= 180);
-  assertTrue(deltaRot > -180);
-
-  deltaRot = std::min(std::max(deltaRot, -10), 10);
-  _deltaRot = deltaRot;
-
-  _rotation = (_rotation + deltaRot + 360) % 360;
-}
-
-void Player::moveForward(Direction dir) {
-  auto v = dirVectors[static_cast<int>(dir)];
-
-  _pos.add(v);
-  _trackOffset = (_trackOffset + v.x + v.y + 3) % 3;
-}
-
-void Player::moveBackward(Direction dir) {
-  auto v = dirVectors[static_cast<int>(dir)];
-
-  _pos.sub(v);
-  _trackOffset = (_trackOffset - v.x - v.y + 3) % 3;
+//  gb.display.setCursor(0, 0);
+//  if (_move) {
+//    gb.display.printf("%d (%d,%d)", _move->_blocked, _move->_dstPos.x, _move->_dstPos.y);
+//  }
 }
 
 void Box::init(GridPos pos, ObjectColor color) {
@@ -272,6 +282,7 @@ void Box::draw(int x0, int y0) {
 
   gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(_color)]);
   gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, boxImage);
+  gb.display.colorIndex = PALETTE_DEFAULT;
 }
 
 Level::Level(const LevelSpec& spec)
@@ -342,13 +353,17 @@ void Level::draw() {
     _boxes[i].draw(x0, y0);
   }
 
+  _player.draw(x0, y0);
+
+//  if (_player.isAtGridPos()) {
+//    GridPos p = _player.gridPos();
+//    gb.display.printf("(%d,%d) = %d", p.x, p.y, _spec.grid.tiles[p.x + p.y * _spec.grid.w]);
+//  }
+
   for (int i = 0; i < _spec.numBubbles; ++i) {
     auto& obj = _spec.bubbles[i];
     gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
   }
-
   gb.display.colorIndex = PALETTE_DEFAULT;
-
-  _player.draw(x0, y0);
 }

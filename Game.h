@@ -82,7 +82,6 @@ class Player {
 
   // Rotation angle, range [0, 360>
   int _rotation;
-  int _deltaRot = 0;
 
   ObjectColor _bubble;
 
@@ -117,6 +116,9 @@ public:
 
   int rotation() const { return _rotation; }
   bool isAtGridPos() const { return (_pos.x % 8 + _pos.y % 8) == 0; };
+  GridPos gridPos() const {
+    return GridPos((_pos.x + 4) / 8, (_pos.y + 4) / 8);
+  }
 
   void rotateTowards(int rotation);
   void moveForward(Direction dir);

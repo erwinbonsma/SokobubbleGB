@@ -17,7 +17,7 @@ const Color palettes[numPalettes][numPaletteColors] = {
   // Yellow
   { BLACK,  BROWN,  PURPLE, GREEN,  BROWN,  DGRAY,  GRAY,   WHITE,  RED,    ORANGE, YELLOW, LGREEN, YELLOW, ORANGE, PINK,   BEIGE },
   // Any
-  { BLACK,  BROWN,  PURPLE, GREEN,  BROWN,  DGRAY,  GRAY,   WHITE,  RED,    ORANGE, YELLOW, LGREEN, LBLUE,  GRAY,   PINK,   BEIGE },
+  { BLACK,  BROWN,  PURPLE, GREEN,  BROWN,  DGRAY,  GRAY,   WHITE,  RED,    ORANGE, YELLOW, LGREEN, WHITE,  GRAY,   PINK,   BEIGE },
 };
 
 Color* PALETTE_DEFAULT = const_cast<Color *>(palettes[0]);
