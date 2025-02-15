@@ -217,7 +217,7 @@ void Player::draw(int x0, int y0) {
 
   if (sector == 0 || sector == 3) {
     // Sprite is horizontal or vertical
-    playerImage.setFrame(orientation * 5 + _trackOffset);
+    playerImage.setFrame(((orientation + sector / 3) % 2) * 5 + _trackOffset);
   } else {
     playerImage.setFrame(orientation * 5 + sector + 2);
   }
