@@ -29,6 +29,6 @@ struct LevelSpec {
   const ObjectSpec* bubbles;
 };
 
-const int maxBoxes = 4;
-const int numLevels = 1;
+constexpr int maxBoxes = 4;
+constexpr int numLevels = 1;
 extern const LevelSpec levels[numLevels];
