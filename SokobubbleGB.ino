@@ -1,5 +1,7 @@
 #include <Gamebuino-Meta.h>
 
+#include <utility>
+
 #include "Game.h"
 #include "Images.h"
 #include "Levels.h"
@@ -9,7 +11,8 @@
 UpdateFunction updateFunction;
 DrawFunction drawFunction;
 
-Level level{levels[0]};
+Level level;
+
 
 void draw() {
   gb.display.clear(DARKGRAY);
@@ -19,6 +22,10 @@ void draw() {
 
 void update() {
   level.update();
+
+  if (level.isDone()) {
+    level.init((level.levelIndex() + 1) % numLevels);
+  }
 }
 
 void setup() {
@@ -27,6 +34,8 @@ void setup() {
 
   updateFunction = update;
   drawFunction = draw;
+
+  level.init(0);
 }
 
 void loop() {

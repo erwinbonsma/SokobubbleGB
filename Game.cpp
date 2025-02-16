@@ -98,7 +98,8 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
 }
 
 void Player::init(GridPos pos, ObjectColor bubble) {
-  _pos = Vector2D(pos.x * 8, pos.y * 8);
+  Moveable::init(pos);
+
   _bubble = bubble;
   _rotation = 0;
 
@@ -315,7 +316,8 @@ void Player::draw(int x0, int y0) {
 }
 
 void Box::init(GridPos pos, ObjectColor color) {
-  _pos = Vector2D(pos.x * 8, pos.y * 8);
+  Moveable::init(pos);
+
   _color = color;
 }
 
@@ -331,25 +333,26 @@ void Box::draw(int x0, int y0) {
   gb.display.colorIndex = PALETTE_DEFAULT;
 }
 
-Level::Level(const LevelSpec& spec)
-: _spec(spec)
-, _player(*this)
-{
+void Level::init(int levelIndex) {
+  _levelIndex = levelIndex;
+  _spec = &levels[levelIndex];
+
   start();
 }
 
 void Level::start() {
-  _player.init(_spec.startPos);
+  _player.init(_spec->startPos);
 
-  for (int i = 0; i < _spec.numBoxes; i++) {
-    _boxes[i].init(_spec.boxes[i].pos, _spec.boxes[i].color);
+  for (int i = 0; i < _spec->numBoxes; i++) {
+    _boxes[i].init(_spec->boxes[i].pos, _spec->boxes[i].color);
   }
 
   _moveCount = 0;
+  _boxCount = 0;
 }
 
 Box* Level::boxAt(GridPos pos) {
-  for (int i = 0; i < _spec.numBoxes; ++i ) {
+  for (int i = 0; i < _spec->numBoxes; ++i ) {
     if (_boxes[i].gridPos() == pos) {
       return &_boxes[i];
     }
@@ -359,9 +362,9 @@ Box* Level::boxAt(GridPos pos) {
 }
 
 ObjectColor Level::bubbleAt(GridPos pos) const {
-  auto& bubbles = _spec.bubbles;
+  auto& bubbles = _spec->bubbles;
 
-  for (int i = 0; i < _spec.numBubbles; ++i ) {
+  for (int i = 0; i < _spec->numBubbles; ++i ) {
     if (bubbles[i].pos == pos) {
       return bubbles[i].color;
     }
@@ -370,10 +373,45 @@ ObjectColor Level::bubbleAt(GridPos pos) const {
   return ObjectColor::None;
 }
 
+ObjectColor Level::targetAt(GridPos pos) const {
+  auto& targets = _spec->targets;
+
+  for (int i = 0; i < _spec->numTargets; ++i ) {
+    if (targets[i].pos == pos) {
+      return targets[i].color;
+    }
+  }
+
+  return ObjectColor::None;
+}
+
 bool Level::isWall(GridPos pos) const {
-  auto& grid = _spec.grid;
+  auto& grid = _spec->grid;
 
   return grid.tiles[pos.x + pos.y * grid.w] != 0;
+}
+
+bool Level::isDone() {
+  int boxCount = 0;
+
+  for (int i = 0; i < _spec->numBoxes; ++i ) {
+    auto& box = _boxes[i];
+
+    if (box.isAtGridPos()) {
+      ObjectColor targetColor = targetAt(box.gridPos());
+
+      if (targetColor == box.color() || targetColor == ObjectColor::Any) {
+        boxCount++;
+      }
+    }
+  }
+
+  if (boxCount != _boxCount) {
+    // TODO: SFX
+    _boxCount = boxCount;
+  }
+
+  return _boxCount == _spec->numBoxes;
 }
 
 void Level::update() {
@@ -381,13 +419,13 @@ void Level::update() {
 }
 
 void Level::draw() {
-  int x0 = 40 - _spec.grid.w * 4;
-  int y0 = 32 - _spec.grid.h * 4;
+  int x0 = 40 - _spec->grid.w * 4;
+  int y0 = 32 - _spec->grid.h * 4;
 
-  for (int y = 0; y < _spec.grid.h; ++y) {
-    int rowOffset = y * _spec.grid.w;
-    for (int x = 0; x < _spec.grid.w; ++x) {
-      int tileIndex = _spec.grid.tiles[x + rowOffset];
+  for (int y = 0; y < _spec->grid.h; ++y) {
+    int rowOffset = y * _spec->grid.w;
+    for (int x = 0; x < _spec->grid.w; ++x) {
+      int tileIndex = _spec->grid.tiles[x + rowOffset];
       if (tileIndex > 0) {
         wallsImage.setFrame(tileIndex - 1);
         gb.display.drawImage(x0 + x * 8, y0 + y * 8, wallsImage);
@@ -395,25 +433,27 @@ void Level::draw() {
     }
   }
 
-  for (int i = 0; i < _spec.numTargets; ++i) {
-    auto& obj = _spec.targets[i];
+  for (int i = 0; i < _spec->numTargets; ++i) {
+    auto& obj = _spec->targets[i];
     gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, targetImage);
   }
 
-  for (int i = 0; i < _spec.numBoxes; ++i) {
+  for (int i = 0; i < _spec->numBoxes; ++i) {
     _boxes[i].draw(x0, y0);
   }
 
   _player.draw(x0, y0);
 
+  gb.display.printf("%d/%d", _boxCount, _spec->numBoxes);
+
 //  if (_player.isAtGridPos()) {
 //    GridPos p = _player.gridPos();
-//    gb.display.printf("(%d,%d) = %d", p.x, p.y, _spec.grid.tiles[p.x + p.y * _spec.grid.w]);
+//    gb.display.printf("(%d,%d) = %d", p.x, p.y, _spec->grid.tiles[p.x + p.y * _spec->grid.w]);
 //  }
 
-  for (int i = 0; i < _spec.numBubbles; ++i) {
-    auto& obj = _spec.bubbles[i];
+  for (int i = 0; i < _spec->numBubbles; ++i) {
+    auto& obj = _spec->bubbles[i];
     gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
   }

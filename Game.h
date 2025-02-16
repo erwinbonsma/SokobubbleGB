@@ -74,16 +74,27 @@ public:
 
 class Level;
 
-class Player {
+class Moveable {
+protected:
+  // Position in pixels wrt to top-left corner of level
+  Vector2D _pos;
+
+public:
+  void init(GridPos pos) { _pos = Vector2D(pos.x * 8, pos.y * 8); }
+
+  bool isAtGridPos() const { return (_pos.x % 8 + _pos.y % 8) == 0; };
+  GridPos gridPos() const {
+    return GridPos((_pos.x + 4) / 8, (_pos.y + 4) / 8);
+  }
+};
+
+class Player : public Moveable {
   friend class MoveAnimation;
   friend class BlockedMoveAnimation;
   friend class PlainMoveAnimation;
   friend class PushMoveAnimation;
 
   Level& _level;
-
-  // Position in pixels wrt to top-left corner of level
-  Vector2D _pos;
 
   // Rotation angle, range [0, 360>
   int _rotation;
@@ -129,10 +140,6 @@ public:
   Player(Level& level) : _level(level) {}
 
   int rotation() const { return _rotation; }
-  bool isAtGridPos() const { return (_pos.x % 8 + _pos.y % 8) == 0; };
-  GridPos gridPos() const {
-    return GridPos((_pos.x + 4) / 8, (_pos.y + 4) / 8);
-  }
 
   void init(GridPos pos, ObjectColor bubble = ObjectColor::None);
   void update();
@@ -140,17 +147,11 @@ public:
   void draw(int x0, int y0);
 };
 
-class Box {
-  // Position in pixels wrt to top-left corner of level
-  Vector2D _pos;
+class Box : public Moveable {
   ObjectColor _color;
 
 public:
   void init(GridPos pos, ObjectColor color);
-
-  GridPos gridPos() const {
-    return GridPos((_pos.x + 4) / 8, (_pos.y + 4) / 8);
-  }
 
   ObjectColor color() const { return _color; }
   void moveStep(Direction dir);
@@ -159,20 +160,30 @@ public:
 };
 
 class Level {
-  const LevelSpec& _spec;
+  int _levelIndex;
+  const LevelSpec* _spec;
+
   Player _player;
   Box _boxes[maxBoxes];
   int _moveCount;
 
-public:
-  Level(const LevelSpec& spec);
+  // The number of correctly placed boxes
+  int _boxCount;
 
+public:
+  Level() : _player(*this) {}
+
+  void init(int levelIndex);
+
+  int levelIndex() const { return _levelIndex; }
   Box* boxAt(GridPos pos);
   ObjectColor bubbleAt(GridPos pos) const;
+  ObjectColor targetAt(GridPos pos) const;
   bool isWall(GridPos pos) const;
 
   void start();
   void incMoveCount() { _moveCount++; }
+  bool isDone();
 
   void update();
   void draw();
