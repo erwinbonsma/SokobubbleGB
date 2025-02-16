@@ -65,6 +65,11 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
 
   _step++;
 
+  if (_step == 1 && !player.isAtGridPos()) {
+    // Continue ongoing push
+    _step = 3;
+  }
+
   if (_step <= 2) {
     player.moveForward(move.dir());
     return false;
@@ -73,6 +78,11 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
   if (_step <= 10) {
     player.moveForward(move.dir());
     move.pushedBox()->moveStep(move.dir());
+
+    if (_step == 10 && player.pushContinues()) {
+      player.startNextMove();
+    }
+
     return false;
   }
 
@@ -151,22 +161,21 @@ Move* Player::checkMove(Move* move) {
   return move;
 }
 
-MoveAnimation* Player::startMove(Move* move) {
-  _move = move;
+void Player::startNextMove() {
+  _move = _moveNext;
+  _moveNext = nullptr;
 
-//  MoveAnimation* anim = &_plainMoveAnim;
-  MoveAnimation* anim = nullptr;
-  if (move->_blocked) {
-    anim = &_blockedMoveAnim;
-  } else if (move->_pushedBox) {
-    anim = &_pushMoveAnim;
+  if (_move->_blocked) {
+    _moveAnim = &_blockedMoveAnim;
+  } else if (_move->_pushedBox) {
+    _moveAnim = &_pushMoveAnim;
   } else {
-    anim = &_plainMoveAnim;
+    _moveAnim = &_plainMoveAnim;
   }
 
-  anim->init();
+  _moveAnim->init();
 
-  if (!move->_blocked) {
+  if (!_move->_blocked) {
     _level.incMoveCount();
   }
 
@@ -178,8 +187,6 @@ MoveAnimation* Player::startMove(Move* move) {
     // Do not animate 180 degree turn
     _rotation = targetRotation;
   }
-
-  return anim;
 }
 
 void Player::rotateTowards(int rotation) {
@@ -211,6 +218,14 @@ void Player::moveBackward(Direction dir) {
   _trackOffset = (_trackOffset - v.x - v.y + 3) % 3;
 }
 
+
+bool Player::pushContinues() {
+  assertTrue(_move && _move->_pushedBox);
+
+  // Use fact that "pushedBox" is only set when move is not blocked
+  return (_moveNext && _moveNext->_pushedBox == _move->_pushedBox);
+}
+
 void Player::update() {
   Move* nextMove = nullptr;
   if (gb.buttons.pressed(BUTTON_UP)) {
@@ -229,8 +244,7 @@ void Player::update() {
 
   if (_moveNext) {
     if (!_move) {
-      _moveAnim = startMove(_moveNext);
-      _moveNext = nullptr;
+      startNextMove();
     }
   }
 

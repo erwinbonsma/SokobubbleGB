@@ -75,6 +75,11 @@ public:
 class Level;
 
 class Player {
+  friend class MoveAnimation;
+  friend class BlockedMoveAnimation;
+  friend class PlainMoveAnimation;
+  friend class PushMoveAnimation;
+
   Level& _level;
 
   // Position in pixels wrt to top-left corner of level
@@ -109,7 +114,13 @@ class Player {
   Move* checkMove(Move* move);
 
   // Starts the given move.
-  MoveAnimation* startMove(Move* move);
+  void startNextMove();
+
+  void rotateTowards(int rotation);
+  void moveForward(Direction dir);
+  void moveBackward(Direction dir);
+
+  bool pushContinues();
 
 public:
   Player(Level& level) : _level(level) {}
@@ -119,10 +130,6 @@ public:
   GridPos gridPos() const {
     return GridPos((_pos.x + 4) / 8, (_pos.y + 4) / 8);
   }
-
-  void rotateTowards(int rotation);
-  void moveForward(Direction dir);
-  void moveBackward(Direction dir);
 
   void init(GridPos pos, ObjectColor bubble = ObjectColor::None);
   void update();
