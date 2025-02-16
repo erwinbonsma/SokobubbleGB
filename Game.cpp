@@ -100,10 +100,14 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
 void Player::init(GridPos pos, ObjectColor bubble) {
   _pos = Vector2D(pos.x * 8, pos.y * 8);
   _bubble = bubble;
+  _rotation = 0;
 
   _trackOffset = 0;
   _move = nullptr;
   _moveNext = nullptr;
+
+  // Ignore button A being pressed until it is first released.
+  _retryCount = -1;
 }
 
 Move* Player::getMove(Direction dir) {
@@ -251,6 +255,15 @@ void Player::update() {
     }
   }
 
+  if (gb.buttons.repeat(BUTTON_A, 0)) {
+    if (_retryCount != -1 && ++_retryCount > 30) {
+      _level.start();
+      return;
+    }
+  } else {
+    _retryCount = 0;
+  }
+
   if (_moveNext) {
     if (!_move) {
       startNextMove();
@@ -285,7 +298,12 @@ void Player::draw(int x0, int y0) {
     playerImage.setFrame(orientation * 5 + sector + 2);
   }
 
-  int palIdx = _bubble == ObjectColor::None ? 5 : static_cast<int>(_bubble);
+  int palIdx;
+  if (_retryCount > 0) {
+    palIdx = 1 + (_retryCount / 2) % 4;
+  } else {
+    palIdx = _bubble == ObjectColor::None ? 5 : static_cast<int>(_bubble);
+  }
   gb.display.colorIndex = const_cast<Color *>(palettes[palIdx]);
   gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
   gb.display.colorIndex = PALETTE_DEFAULT;
@@ -317,11 +335,17 @@ Level::Level(const LevelSpec& spec)
 : _spec(spec)
 , _player(*this)
 {
-  _player.init(spec.startPos);
+  start();
+}
 
-  for (int i = 0; i < spec.numBoxes; i++) {
-    _boxes[i].init(spec.boxes[i].pos, spec.boxes[i].color);
+void Level::start() {
+  _player.init(_spec.startPos);
+
+  for (int i = 0; i < _spec.numBoxes; i++) {
+    _boxes[i].init(_spec.boxes[i].pos, _spec.boxes[i].color);
   }
+
+  _moveCount = 0;
 }
 
 Box* Level::boxAt(GridPos pos) {

@@ -95,8 +95,10 @@ class Player {
 
   Move* _move;
   Move* _moveNext;
-  int _moveNextExpiry;
   MoveAnimation* _moveAnim;
+
+  int _moveNextExpiry;
+  int _retryCount;
 
   // Object pools
   PlainMoveAnimation _plainMoveAnim;
@@ -169,6 +171,7 @@ public:
   ObjectColor bubbleAt(GridPos pos) const;
   bool isWall(GridPos pos) const;
 
+  void start();
   void incMoveCount() { _moveCount++; }
 
   void update();
