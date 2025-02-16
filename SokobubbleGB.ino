@@ -6,6 +6,7 @@
 #include "Images.h"
 #include "Levels.h"
 #include "Palettes.h"
+#include "SoundFx.h"
 #include "Utils.h"
 
 UpdateFunction updateFunction;
@@ -13,6 +14,11 @@ DrawFunction drawFunction;
 
 Level level;
 
+void startLevel(int levelIndex) {
+  level.init(levelIndex);
+
+  gb.sound.fx(getReadySfx);
+}
 
 void draw() {
   gb.display.clear(DARKGRAY);
@@ -24,7 +30,7 @@ void update() {
   level.update();
 
   if (level.isDone()) {
-    level.init((level.levelIndex() + 1) % numLevels);
+    startLevel((level.levelIndex() + 1) % numLevels);
   }
 }
 
@@ -35,7 +41,7 @@ void setup() {
   updateFunction = update;
   drawFunction = draw;
 
-  level.init(0);
+  startLevel(0);
 }
 
 void loop() {

@@ -6,6 +6,7 @@
 
 #include "Images.h"
 #include "Palettes.h"
+#include "SoundFx.h"
 
 const Vector2D dirVectors[4] = {
   Vector2D(0, -1), Vector2D(1, 0), Vector2D(0, 1), Vector2D(-1, 0)
@@ -58,6 +59,11 @@ bool BlockedMoveAnimation::step(Player& player, Move& move) {
   _step++;
   if (_step <= move.blockedDistance()) {
     player.moveForward(move.dir());
+
+    if (_step == move.blockedDistance()) {
+      gb.sound.fx(noCanDoSfx);
+    }
+
     return false;
   }
 
@@ -79,6 +85,11 @@ bool PushMoveAnimation::step(Player& player, Move& move) {
 
   if (_step <= 2) {
     player.moveForward(move.dir());
+
+    if (_step == 2) {
+      gb.sound.fx(pushStartSfx);
+    }
+
     return false;
   }
 
@@ -258,6 +269,7 @@ void Player::update() {
 
   if (gb.buttons.repeat(BUTTON_A, 0)) {
     if (_retryCount != -1 && ++_retryCount > 30) {
+      gb.sound.fx(giveUpSfx);
       _level.start();
       return;
     }
@@ -280,6 +292,7 @@ void Player::update() {
     if (_moveAnim->step(*this, *_move)) {
       if (_move->_dstBub != _bubble) {
         _bubble = _move->_dstBub;
+        gb.sound.fx(bubbleChangeSfx);
       }
 
       _move = nullptr;
@@ -407,8 +420,8 @@ bool Level::isDone() {
   }
 
   if (boxCount != _boxCount) {
-    // TODO: SFX
     _boxCount = boxCount;
+    gb.sound.fx(boxPlacedSfx);
   }
 
   return _boxCount == _spec->numBoxes;
