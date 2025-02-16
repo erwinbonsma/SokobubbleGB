@@ -11,6 +11,13 @@ const Vector2D dirVectors[4] = {
   Vector2D(0, -1), Vector2D(1, 0), Vector2D(0, 1), Vector2D(-1, 0)
 };
 
+const std::pair<Button, Direction> buttonMap[] = {
+  { BUTTON_UP, Direction::Up },
+  { BUTTON_RIGHT, Direction::Right },
+  { BUTTON_DOWN, Direction::Down },
+  { BUTTON_LEFT, Direction::Left },
+};
+
 void Move::init(Direction dir) {
   _dir = dir;
 
@@ -227,24 +234,31 @@ bool Player::pushContinues() {
 }
 
 void Player::update() {
-  Move* nextMove = nullptr;
-  if (gb.buttons.pressed(BUTTON_UP)) {
-    nextMove = getMove(Direction::Up);
-  } else if (gb.buttons.pressed(BUTTON_RIGHT)) {
-    nextMove = getMove(Direction::Right);
-  } else if (gb.buttons.pressed(BUTTON_DOWN)) {
-    nextMove = getMove(Direction::Down);
-  } else if (gb.buttons.pressed(BUTTON_LEFT)) {
-    nextMove = getMove(Direction::Left);
-  }
+  for (auto& pair : buttonMap) {
+    if (
+      gb.buttons.pressed(pair.first)
+      || (
+        gb.buttons.repeat(pair.first, 0)
+        && (!_moveNext || _moveNextExpiry <= 2)
+      )
+    ) {
+      _moveNext = checkMove(getMove(pair.second));
 
-  if (nextMove) {
-    _moveNext = checkMove(nextMove);
+      // Button held schedules a short-lived move request.
+      // This allows a continuous move, but should prevent that a
+      // move goes on one step too many.
+      _moveNextExpiry = gb.buttons.pressed(pair.first) ? 99 : 2;
+    }
   }
 
   if (_moveNext) {
     if (!_move) {
       startNextMove();
+    } else {
+      if (--_moveNextExpiry == 0) {
+        // Remove short-lived move request
+        _moveNext = nullptr;
+      }
     }
   }
 

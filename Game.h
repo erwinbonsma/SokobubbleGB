@@ -95,6 +95,7 @@ class Player {
 
   Move* _move;
   Move* _moveNext;
+  int _moveNextExpiry;
   MoveAnimation* _moveAnim;
 
   // Object pools
