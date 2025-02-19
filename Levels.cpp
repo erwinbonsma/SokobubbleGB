@@ -46,6 +46,31 @@ const ObjectSpec bubblesTargets[] = {
   ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Red },
 };
 
+const uint8_t tilesOrder[] = {
+  0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x0f, 0x09,    0,    0,    0,    0, 0x0b, 0x0d,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x04, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x05,
+};
+const ObjectSpec boxesOrder[] = {
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Blue },
+};
+const ObjectSpec targetsOrder[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Blue },
+};
+const ObjectSpec bubblesOrder[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -68,5 +93,16 @@ const LevelSpec levels[numLevels] = {
     .targets = targetsTargets,
     .numBubbles = 2,
     .bubbles = bubblesTargets,
+  },
+  LevelSpec {
+    .name = "Order",
+    .grid = GridSpec { .w = 8, .h = 6, .tiles = tilesOrder },
+    .startPos = GridPos(4, 2),
+    .numBoxes = 4,
+    .boxes = boxesOrder,
+    .numTargets = 4,
+    .targets = targetsOrder,
+    .numBubbles = 2,
+    .bubbles = bubblesOrder,
   },
 };
