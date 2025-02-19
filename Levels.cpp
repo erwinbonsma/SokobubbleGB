@@ -71,6 +71,33 @@ const ObjectSpec bubblesOrder[] = {
   ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Blue },
 };
 
+const uint8_t tilesOverlap[] = {
+  0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x06,    0,    0,    0,    0,    0, 0x10, 0x06,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x06,    0,    0,    0,    0,    0,    0, 0x06,
+  0x06,    0,    0, 0x10,    0,    0,    0, 0x06,
+  0x04, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x05,
+};
+const ObjectSpec boxesOverlap[] = {
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+};
+const ObjectSpec targetsOverlap[] = {
+  ObjectSpec { .pos = GridPos(6, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 6), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 6), .color = ObjectColor::Blue },
+};
+const ObjectSpec bubblesOverlap[] = {
+  ObjectSpec { .pos = GridPos(1, 6), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -104,5 +131,16 @@ const LevelSpec levels[numLevels] = {
     .targets = targetsOrder,
     .numBubbles = 2,
     .bubbles = bubblesOrder,
+  },
+  LevelSpec {
+    .name = "Overlap",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesOverlap },
+    .startPos = GridPos(2, 2),
+    .numBoxes = 4,
+    .boxes = boxesOverlap,
+    .numTargets = 4,
+    .targets = targetsOverlap,
+    .numBubbles = 2,
+    .bubbles = bubblesOverlap,
   },
 };
