@@ -374,6 +374,8 @@ void Level::init(int levelIndex) {
   _spec = &levels[levelIndex];
   _showScore = true;
 
+  drawFixed(_fixedImage);
+
   start();
 }
 
@@ -475,8 +477,14 @@ Animation* Level::update() {
 }
 
 void Level::drawScore(int xOffset) {
-  int x0 = 67 + xOffset;
+  gb.display.setColor(BLACK);
+  gb.display.fillRect(64 + xOffset, 0, 16, 64);
 
+  if (!_showScore) {
+    return;
+  }
+
+  int x0 = 67 + xOffset;
   gb.display.setColor(GRAY);
 
   gb.display.setCursor(x0, 8);
@@ -505,8 +513,13 @@ void Level::drawScore(int xOffset) {
   gb.display.print("Cpu");
 }
 
-void Level::drawFixed(int x0, int y0) {
-  gb.display.setColor(DARKGRAY);
+void Level::drawFixed(Gamebuino_Meta::Graphics& g) {
+  int x0 = 32 - _spec->grid.w * 4;
+  int y0 = 32 - _spec->grid.h * 4;
+
+  g.clear(BLACK);
+
+  g.setColor(DARKGRAY);
   for (int y = 0; y < _spec->grid.h; ++y) {
     int rowOffset = y * _spec->grid.w;
     int sy = y0 + y * 8;
@@ -515,9 +528,9 @@ void Level::drawFixed(int x0, int y0) {
       int sx = x0 + x * 8;
       if (tileIndex > 0) {
         wallsImage.setFrame(tileIndex - 1);
-        gb.display.drawImage(sx, sy, wallsImage);
+        g.drawImage(sx, sy, wallsImage);
       } else if (tileIndex == 0) {
-        gb.display.fillRect(sx, sy, 8, 8);
+        g.fillRect(sx, sy, 8, 8);
       }
     }
   }
@@ -527,7 +540,7 @@ void Level::draw(int xOffset) {
   int x0 = 32 - _spec->grid.w * 4 + xOffset;
   int y0 = 32 - _spec->grid.h * 4;
 
-  drawFixed(x0, y0);
+  gb.display.drawImage(xOffset, 0, _fixedImage);
 
   for (int i = 0; i < _spec->numTargets; ++i) {
     auto& obj = _spec->targets[i];
@@ -541,9 +554,7 @@ void Level::draw(int xOffset) {
 
   _player.draw(x0, y0);
 
-  if (_showScore) {
-    drawScore(xOffset);
-  }
+  drawScore(xOffset);
 
   for (int i = 0; i < _spec->numBubbles; ++i) {
     auto& obj = _spec->bubbles[i];
@@ -567,8 +578,6 @@ void Game::update() {
 }
 
 void Game::draw() {
-  gb.display.clear(BLACK);
-
   if (_animation && _animation->implementsDraw()) {
     _animation->draw();
   } else {

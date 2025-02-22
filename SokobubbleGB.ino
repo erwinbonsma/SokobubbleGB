@@ -29,7 +29,7 @@ void setup() {
 
   game.level().init(0);
 
-  //gb.sound.playSong(song, true);
+  gb.sound.playSong(song, true);
 }
 
 void loop() {

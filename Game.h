@@ -174,6 +174,8 @@ class Level {
   int _levelIndex;
   const LevelSpec* _spec;
 
+  Image _fixedImage { 64, 64, ColorMode::index };
+
   Player _player;
   Box _boxes[maxBoxes];
   int _moveCount;
@@ -186,7 +188,7 @@ class Level {
   bool isDone();
 
   void drawScore(int xOffset);
-  void drawFixed(int x0, int y0);
+  void drawFixed(Gamebuino_Meta::Graphics& graphics);
 
 public:
   Level() : _player(*this) {}
