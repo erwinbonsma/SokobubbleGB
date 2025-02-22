@@ -411,21 +411,27 @@ ObjectColor Level::bubbleAt(GridPos pos) const {
 }
 
 ObjectColor Level::targetAt(GridPos pos) const {
-  auto& targets = _spec->targets;
+  // Quickly look if there's a target
+  auto& grid = _spec->grid;
+  if (grid.tiles[pos.x + pos.y * grid.w] != -1) {
+    return ObjectColor::None;
+  }
 
+  // If so, find its color (TODO: also store in grid)
+  auto& targets = _spec->targets;
   for (int i = 0; i < _spec->numTargets; ++i ) {
     if (targets[i].pos == pos) {
       return targets[i].color;
     }
   }
 
-  return ObjectColor::None;
+  assertTrue(false);
 }
 
 bool Level::isWall(GridPos pos) const {
   auto& grid = _spec->grid;
 
-  return grid.tiles[pos.x + pos.y * grid.w] != 0;
+  return grid.tiles[pos.x + pos.y * grid.w] > 0;
 }
 
 bool Level::isDone() {
@@ -499,27 +505,19 @@ void Level::drawScore(int xOffset) {
   gb.display.print("Cpu");
 }
 
-void Level::drawFloor(int x0, int y0) {
-  int w = _spec->grid.w * 8;
-  int h = _spec->grid.h * 8;
-
+void Level::drawFixed(int x0, int y0) {
   gb.display.setColor(DARKGRAY);
-  gb.display.fillRect(x0 + 4, y0 + 4, w - 8, h - 8);
-
-  gb.display.setColor(BLACK);
   for (int y = 0; y < _spec->grid.h; ++y) {
     int rowOffset = y * _spec->grid.w;
+    int sy = y0 + y * 8;
     for (int x = 0; x < _spec->grid.w; ++x) {
       int tileIndex = _spec->grid.tiles[x + rowOffset];
-      if (tileIndex < 0) {
-        // Clear floor on outside. Use padding to also fix nearby bevelled
-        // corners
-        gb.display.fillRect(
-          std::max(x0, x0 + x * 8 - 4),
-          std::max(y0, y0 + y * 8 - 4),
-          std::min(x0 + w - 1, x0 + x * 8 + 12),
-          std::min(y0 + w - 1, y0 + y * 8 + 12)
-        );
+      int sx = x0 + x * 8;
+      if (tileIndex > 0) {
+        wallsImage.setFrame(tileIndex - 1);
+        gb.display.drawImage(sx, sy, wallsImage);
+      } else if (tileIndex == 0) {
+        gb.display.fillRect(sx, sy, 8, 8);
       }
     }
   }
@@ -529,18 +527,7 @@ void Level::draw(int xOffset) {
   int x0 = 32 - _spec->grid.w * 4 + xOffset;
   int y0 = 32 - _spec->grid.h * 4;
 
-  drawFloor(x0, y0);
-
-  for (int y = 0; y < _spec->grid.h; ++y) {
-    int rowOffset = y * _spec->grid.w;
-    for (int x = 0; x < _spec->grid.w; ++x) {
-      int tileIndex = _spec->grid.tiles[x + rowOffset];
-      if (tileIndex > 0) {
-        wallsImage.setFrame(tileIndex - 1);
-        gb.display.drawImage(x0 + x * 8, y0 + y * 8, wallsImage);
-      }
-    }
-  }
+  drawFixed(x0, y0);
 
   for (int i = 0; i < _spec->numTargets; ++i) {
     auto& obj = _spec->targets[i];
