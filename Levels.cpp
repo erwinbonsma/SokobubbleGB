@@ -1,6 +1,6 @@
 #include "Levels.h"
 
-const uint8_t tilesBubbles[] = {
+const int8_t tilesBubbles[] = {
   0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
   0x06,    0,    0,    0,    0,    0, 0x06,
   0x06,    0, 0x08,    0, 0x08,    0, 0x06,
@@ -22,7 +22,7 @@ const ObjectSpec bubblesBubbles[] = {
   ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Blue },
 };
 
-const uint8_t tilesTargets[] = {
+const int8_t tilesTargets[] = {
   0x02, 0x07, 0x0c, 0x07, 0x0c, 0x07, 0x03,
   0x06,    0, 0x0a,    0, 0x0a,    0, 0x06,
   0x06,    0,    0,    0,    0,    0, 0x06,
@@ -46,7 +46,7 @@ const ObjectSpec bubblesTargets[] = {
   ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Red },
 };
 
-const uint8_t tilesOrder[] = {
+const int8_t tilesOrder[] = {
   0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
   0x0f, 0x09,    0,    0,    0,    0, 0x0b, 0x0d,
@@ -71,7 +71,7 @@ const ObjectSpec bubblesOrder[] = {
   ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Blue },
 };
 
-const uint8_t tilesOverlap[] = {
+const int8_t tilesOverlap[] = {
   0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
@@ -98,7 +98,7 @@ const ObjectSpec bubblesOverlap[] = {
   ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Blue },
 };
 
-const uint8_t tilesSwap[] = {
+const int8_t tilesSwap[] = {
   0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x03,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
@@ -127,8 +127,8 @@ const ObjectSpec bubblesSwap[] = {
   ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
 };
 
-const uint8_t tilesBarrier[] = {
-  0x02, 0x07, 0x07, 0x07, 0x03,    0,    0,    0,
+const int8_t tilesBarrier[] = {
+  0x02, 0x07, 0x07, 0x07, 0x03,   -1,   -1,   -1,
   0x06,    0,    0,    0, 0x04, 0x07, 0x07, 0x03,
   0x06,    0,    0,    0,    0,    0,    0, 0x06,
   0x0f, 0x09,    0, 0x01,    0,    0, 0x0b, 0x0d,

@@ -185,6 +185,7 @@ class Level {
   bool isDone();
 
   void drawScore(int xOffset);
+  void drawFloor(int x0, int y0);
 
 public:
   Level() : _player(*this) {}

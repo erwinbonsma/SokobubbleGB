@@ -5,7 +5,7 @@
 struct GridSpec {
   const uint8_t w;
   const uint8_t h;
-  const uint8_t* tiles;
+  const int8_t* tiles;
 };
 
 struct ObjectSpec {

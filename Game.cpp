@@ -26,10 +26,10 @@ void drawLevelName(Level* level, int xOffset, int y) {
   int w = strlen(level->name());
 
   gb.display.setColor(BLUE);
-  gb.display.fillRoundRect(40 - w * 2 - 2 + xOffset, y, w * 4 + 4, 7, 1);
+  gb.display.fillRoundRect(32 - w * 2 - 2 + xOffset, y, w * 4 + 4, 7, 1);
 
   gb.display.setTextWrap(false);
-  gb.display.setCursor(40 - w * 2 + xOffset, y + 1);
+  gb.display.setCursor(32 - w * 2 + xOffset, y + 1);
   gb.display.setColor(DARKBLUE);
   gb.display.print(level->name());
 }
@@ -476,8 +476,8 @@ Animation* Level::update() {
 void Level::drawScore(int xOffset) {
   int x = 75 + xOffset;
 
+  gb.display.setColor(GRAY);
   gb.display.setCursorY(2);
-  //gb.display.setCursorY(26 + _spec->grid.h * 4);
   int score = _moveCount;
   for (int i = 0; i < 3; ++i) {
     int digit = score % 10;
@@ -488,9 +488,37 @@ void Level::drawScore(int xOffset) {
   }
 }
 
+void Level::drawFloor(int x0, int y0) {
+  int w = _spec->grid.w * 8;
+  int h = _spec->grid.h * 8;
+
+  gb.display.setColor(DARKGRAY);
+  gb.display.fillRect(x0 + 4, y0 + 4, w - 8, h - 8);
+
+  gb.display.setColor(BLACK);
+  for (int y = 0; y < _spec->grid.h; ++y) {
+    int rowOffset = y * _spec->grid.w;
+    for (int x = 0; x < _spec->grid.w; ++x) {
+      int tileIndex = _spec->grid.tiles[x + rowOffset];
+      if (tileIndex < 0) {
+        // Clear floor on outside. Use padding to also fix nearby bevelled
+        // corners
+        gb.display.fillRect(
+          std::max(x0, x0 + x * 8 - 4),
+          std::max(y0, y0 + y * 8 - 4),
+          std::min(x0 + w - 1, x0 + x * 8 + 12),
+          std::min(y0 + w - 1, y0 + y * 8 + 12)
+        );
+      }
+    }
+  }
+}
+
 void Level::draw(int xOffset) {
-  int x0 = 34 - _spec->grid.w * 4 + xOffset;
+  int x0 = 32 - _spec->grid.w * 4 + xOffset;
   int y0 = 32 - _spec->grid.h * 4;
+
+  drawFloor(x0, y0);
 
   for (int y = 0; y < _spec->grid.h; ++y) {
     int rowOffset = y * _spec->grid.w;
@@ -547,7 +575,7 @@ void Game::update() {
 }
 
 void Game::draw() {
-  gb.display.clear(DARKGRAY);
+  gb.display.clear(BLACK);
 
   if (_animation && _animation->implementsDraw()) {
     _animation->draw();
