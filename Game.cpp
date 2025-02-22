@@ -135,6 +135,8 @@ void Player::init(GridPos pos, ObjectColor bubble) {
 
   // Ignore button A being pressed until it is first released.
   _retryCount = -1;
+
+  _frozen = false;
 }
 
 Move* Player::getMove(Direction dir) {
@@ -264,7 +266,12 @@ bool Player::pushContinues() {
   return (_moveNext && _moveNext->_pushedBox == _move->_pushedBox);
 }
 
-void Player::update() {
+void Player::freeze() {
+  _frozen = true;
+  _moveNext = nullptr;
+}
+
+void Player::handleMoveInput() {
   for (auto& pair : buttonMap) {
     if (
       gb.buttons.pressed(pair.first)
@@ -301,6 +308,12 @@ void Player::update() {
         _moveNext = nullptr;
       }
     }
+  }
+}
+
+void Player::update() {
+  if (!_frozen) {
+    handleMoveInput();
   }
 
   if (_move) {
@@ -447,8 +460,14 @@ Animation* Level::update() {
   _player.update();
 
   if (isDone()) {
-    levelDoneAnim.init();
-    return &levelDoneAnim;
+    _player.freeze();
+
+    if (!_player.isMoving()) {
+      levelDoneAnim.init();
+      return &levelDoneAnim;
+    } else {
+      // Wait for ongoing move to finish
+    }
   }
 
   return nullptr;

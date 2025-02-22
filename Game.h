@@ -113,6 +113,8 @@ class Player : public Moveable {
   int _moveNextExpiry;
   int _retryCount;
 
+  bool _frozen;
+
   // Object pools
   PlainMoveAnimation _plainMoveAnim;
   PushMoveAnimation _pushMoveAnim;
@@ -138,10 +140,16 @@ class Player : public Moveable {
 
   bool pushContinues();
 
+  void handleMoveInput();
+
 public:
   Player(Level& level) : _level(level) {}
 
   int rotation() const { return _rotation; }
+
+  // Finish current move, but do not allow other moves
+  void freeze();
+  bool isMoving() const { return _move != nullptr; };
 
   void init(GridPos pos, ObjectColor bubble = ObjectColor::None);
   void update();
