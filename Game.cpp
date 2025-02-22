@@ -352,6 +352,7 @@ void Box::draw(int x0, int y0) {
 void Level::init(int levelIndex) {
   _levelIndex = levelIndex;
   _spec = &levels[levelIndex];
+  _showScore = true;
 
   start();
 }
@@ -441,8 +442,23 @@ Animation* Level::update() {
   return nullptr;
 }
 
+void Level::drawScore(int xOffset) {
+  int x = 75 + xOffset;
+
+  gb.display.setCursorY(2);
+  //gb.display.setCursorY(26 + _spec->grid.h * 4);
+  int score = _moveCount;
+  for (int i = 0; i < 3; ++i) {
+    int digit = score % 10;
+    gb.display.setCursorX(x);
+    gb.display.print(digit);
+    score /= 10;
+    x -= 4;
+  }
+}
+
 void Level::draw(int xOffset) {
-  int x0 = 40 - _spec->grid.w * 4 + xOffset;
+  int x0 = 34 - _spec->grid.w * 4 + xOffset;
   int y0 = 32 - _spec->grid.h * 4;
 
   for (int y = 0; y < _spec->grid.h; ++y) {
@@ -468,7 +484,9 @@ void Level::draw(int xOffset) {
 
   _player.draw(x0, y0);
 
-//  gb.display.printf("%d/%d", _boxCount, _spec->numBoxes);
+  if (_showScore) {
+    drawScore(xOffset);
+  }
 
 //  if (_player.isAtGridPos()) {
 //    GridPos p = _player.gridPos();

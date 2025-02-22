@@ -171,6 +171,12 @@ class Level {
   // The number of correctly placed boxes
   int _boxCount;
 
+  bool _showScore;
+
+  bool isDone();
+
+  void drawScore(int xOffset);
+
 public:
   Level() : _player(*this) {}
 
@@ -184,7 +190,7 @@ public:
 
   void start();
   void incMoveCount() { _moveCount++; }
-  bool isDone();
+  void setShowScore(bool show) { _showScore = show; }
 
   Animation* update();
   void draw(int xOffset = 0);

@@ -41,5 +41,17 @@ public:
   void draw() override;
 };
 
+class LevelStartAnimation : public Animation {
+  Animation* _slideAnim;
+
+public:
+  void init();
+
+  bool implementsDraw() override { return true; }
+  Animation* update() override;
+  void draw() override;
+};
+
 extern LevelDoneAnimation levelDoneAnim;
+extern LevelStartAnimation levelStartAnim;
 extern LevelSlideAnimation levelSlideAnim;
