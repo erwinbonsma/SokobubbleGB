@@ -21,7 +21,7 @@ Animation* LevelDoneAnimation::update() {
 
   if (_step == 15) {
     gb.sound.fx(levelDoneSfx);
-  } else if (_step == 90) {
+  } else if (_step == 45) {
     levelStartAnim.init();
     return &levelStartAnim;
   }
@@ -35,23 +35,35 @@ void LevelStartAnimation::init() {
   levelSlideAnim.init(oldLevel, &game.level());
   game.level().setShowScore(false);
   _slideAnim = &levelSlideAnim;
+  _nameY = 2;
 }
 
 Animation* LevelStartAnimation::update() {
   if (_slideAnim) {
-    _slideAnim = _slideAnim->update();
+    _slideAnim = static_cast<LevelSlideAnimation *>(_slideAnim->update());
     return this;
-  } else {
+  }
+
+  _nameY--;
+  if (_nameY == -7) {
     game.level().setShowScore(true);
     gb.sound.fx(getReadySfx);
     return nullptr;
   }
+
+  return this;
 }
 
 void LevelStartAnimation::draw() {
+  int offset = 0;
   if (_slideAnim) {
     _slideAnim->draw();
+    offset = _slideAnim->offsetRight();
+  } else {
+    game.level().draw();
   }
+
+  drawLevelName(&game.level(), offset, _nameY);
 }
 
 void LevelSlideAnimation::init(Level* levelL, Level* levelR, bool leftToRight) {
@@ -87,8 +99,8 @@ Animation* LevelSlideAnimation::update() {
 void LevelSlideAnimation::draw() {
   int offset = _leftToRight ? _offset : 80 - _offset;
 
-  _levelL->draw(-offset);
-  _levelR->draw(80-offset);
+  _levelL->draw(offsetLeft());
+  _levelR->draw(offsetRight());
 
   // TODO: Draw level name
 }

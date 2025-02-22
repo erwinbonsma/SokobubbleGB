@@ -35,6 +35,9 @@ class LevelSlideAnimation : public Animation {
 public:
   void init(Level* levelL, Level* levelR, bool leftToRight = true);
 
+  int offsetLeft() const { return -_offset; }
+  int offsetRight() const { return 80 - _offset; }
+
   Animation* update() override;
 
   bool implementsDraw() override { return true; }
@@ -42,7 +45,8 @@ public:
 };
 
 class LevelStartAnimation : public Animation {
-  Animation* _slideAnim;
+  LevelSlideAnimation* _slideAnim;
+  int _nameY;
 
 public:
   void init();

@@ -22,6 +22,18 @@ const std::pair<Button, Direction> buttonMap[] = {
   { BUTTON_LEFT, Direction::Left },
 };
 
+void drawLevelName(Level* level, int xOffset, int y) {
+  int w = strlen(level->name());
+
+  gb.display.setColor(BLUE);
+  gb.display.fillRoundRect(40 - w * 2 - 2 + xOffset, y, w * 4 + 4, 7, 1);
+
+  gb.display.setTextWrap(false);
+  gb.display.setCursor(40 - w * 2 + xOffset, y + 1);
+  gb.display.setColor(DARKBLUE);
+  gb.display.print(level->name());
+}
+
 void Move::init(Direction dir) {
   _dir = dir;
 
