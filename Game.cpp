@@ -4,9 +4,12 @@
 #undef max
 #include <algorithm>
 
+#include "Animations.h"
 #include "Images.h"
 #include "Palettes.h"
 #include "SoundFx.h"
+
+Game game;
 
 const Vector2D dirVectors[4] = {
   Vector2D(0, -1), Vector2D(1, 0), Vector2D(0, 1), Vector2D(-1, 0)
@@ -427,12 +430,19 @@ bool Level::isDone() {
   return _boxCount == _spec->numBoxes;
 }
 
-void Level::update() {
+Animation* Level::update() {
   _player.update();
+
+  if (isDone()) {
+    levelDoneAnim.init();
+    return &levelDoneAnim;
+  }
+
+  return nullptr;
 }
 
-void Level::draw() {
-  int x0 = 40 - _spec->grid.w * 4;
+void Level::draw(int xOffset) {
+  int x0 = 40 - _spec->grid.w * 4 + xOffset;
   int y0 = 32 - _spec->grid.h * 4;
 
   for (int y = 0; y < _spec->grid.h; ++y) {
@@ -458,7 +468,7 @@ void Level::draw() {
 
   _player.draw(x0, y0);
 
-  gb.display.printf("%d/%d", _boxCount, _spec->numBoxes);
+//  gb.display.printf("%d/%d", _boxCount, _spec->numBoxes);
 
 //  if (_player.isAtGridPos()) {
 //    GridPos p = _player.gridPos();
@@ -471,4 +481,28 @@ void Level::draw() {
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
   }
   gb.display.colorIndex = PALETTE_DEFAULT;
+}
+
+void Game::initNextLevel() {
+  int nxtIndex = (level().levelIndex() + 1) % numLevels;
+  _levelToggle = !_levelToggle;
+  level().init(nxtIndex);
+}
+
+void Game::update() {
+  if (_animation) {
+    _animation = _animation->update();
+  } else {
+    _animation = level().update();
+  }
+}
+
+void Game::draw() {
+  gb.display.clear(DARKGRAY);
+
+  if (_animation && _animation->implementsDraw()) {
+    _animation->draw();
+  } else {
+    level().draw();
+  }
 }

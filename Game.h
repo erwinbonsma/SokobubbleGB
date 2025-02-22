@@ -12,6 +12,7 @@ enum class Direction : uint8_t {
 
 inline int rotationAngle(Direction dir) { return static_cast<int>(dir) * 90; }
 
+class Animation;
 class Box;
 class Player;
 
@@ -185,6 +186,29 @@ public:
   void incMoveCount() { _moveCount++; }
   bool isDone();
 
+  Animation* update();
+  void draw(int xOffset = 0);
+};
+
+class Game {
+  // Uses two levels so enable slide animation from old to new one
+  Level _level1;
+  Level _level2;
+  bool _levelToggle;
+
+  Animation* _animation;
+
+public:
+  Level& level() { return _levelToggle ? _level1 : _level2; }
+
+  // Initialises the next level, which is available via level().
+  // The previous level is still available.
+  void initNextLevel();
+
+  void setAnimation(Animation* animation) { _animation = animation; }
+
   void update();
   void draw();
 };
+
+extern Game game;

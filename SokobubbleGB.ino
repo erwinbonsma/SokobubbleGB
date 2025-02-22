@@ -12,26 +12,12 @@
 UpdateFunction updateFunction;
 DrawFunction drawFunction;
 
-Level level;
-
-void startLevel(int levelIndex) {
-  level.init(levelIndex);
-
-  gb.sound.fx(getReadySfx);
-}
-
 void draw() {
-  gb.display.clear(DARKGRAY);
-
-  level.draw();
+  game.draw();
 }
 
 void update() {
-  level.update();
-
-  if (level.isDone()) {
-    startLevel((level.levelIndex() + 1) % numLevels);
-  }
+  game.update();
 }
 
 void setup() {
@@ -41,7 +27,7 @@ void setup() {
   updateFunction = update;
   drawFunction = draw;
 
-  startLevel(0);
+  game.level().init(0);
 }
 
 void loop() {
