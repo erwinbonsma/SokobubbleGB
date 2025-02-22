@@ -474,18 +474,34 @@ Animation* Level::update() {
 }
 
 void Level::drawScore(int xOffset) {
-  int x = 75 + xOffset;
+  int x0 = 67 + xOffset;
 
   gb.display.setColor(GRAY);
-  gb.display.setCursorY(2);
-  int score = _moveCount;
-  for (int i = 0; i < 3; ++i) {
-    int digit = score % 10;
-    gb.display.setCursorX(x);
-    gb.display.print(digit);
-    score /= 10;
-    x -= 4;
-  }
+
+  gb.display.setCursor(x0, 8);
+  gb.display.printf("%3d", _levelIndex);
+
+  gb.display.setCursor(x0, 22);
+  gb.display.printf("%03d", _moveCount);
+
+  gb.display.setCursor(x0, 36);
+  gb.display.print("---");
+
+  gb.display.setCursor(x0, 50);
+  gb.display.printf("%3d", gb.getCpuLoad());
+
+  gb.display.setColor(DARKGRAY);
+  gb.display.setCursor(x0, 2);
+  gb.display.print("Lev");
+
+  gb.display.setCursor(x0, 16);
+  gb.display.print("Mov");
+
+  gb.display.setCursor(x0, 30);
+  gb.display.print("Min");
+
+  gb.display.setCursor(x0, 44);
+  gb.display.print("Cpu");
 }
 
 void Level::drawFloor(int x0, int y0) {
