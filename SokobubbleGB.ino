@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Images.h"
 #include "Levels.h"
+#include "Music.h"
 #include "Palettes.h"
 #include "SoundFx.h"
 #include "Utils.h"
@@ -28,6 +29,8 @@ void setup() {
   drawFunction = draw;
 
   game.level().init(0);
+
+  //gb.sound.playSong(song, true);
 }
 
 void loop() {
