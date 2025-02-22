@@ -6,7 +6,6 @@
 
 #include "Animations.h"
 #include "Images.h"
-#include "Palettes.h"
 #include "SoundFx.h"
 
 Game game;
@@ -346,9 +345,8 @@ void Player::draw(int x0, int y0) {
   } else {
     palIdx = _bubble == ObjectColor::None ? 5 : static_cast<int>(_bubble);
   }
-  gb.display.colorIndex = const_cast<Color *>(palettes[palIdx]);
+  // TODO: show bubble
   gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
-  gb.display.colorIndex = PALETTE_DEFAULT;
 
 //  gb.display.setCursor(0, 0);
 //  if (_move) {
@@ -366,12 +364,9 @@ void Box::moveStep(Direction dir) {
   _pos.add(dirVectors[static_cast<int>(dir)]);
 }
 
-void Box::draw(int x0, int y0) {
-  boxImage.setFrame(0);
-
-  gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(_color)]);
-  gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, boxImage);
-  gb.display.colorIndex = PALETTE_DEFAULT;
+void Box::draw(int x0, int y0, ObjectColor bubbleColor) {
+  boxImage.setFrame(static_cast<int>(_color) * 2 + (bubbleColor != _color) - 2);
+  gb.display.drawImage(x0 + _pos.x + 1, y0 + _pos.y + 1, boxImage);
 }
 
 void Level::init(int levelIndex) {
@@ -549,12 +544,12 @@ void Level::draw(int xOffset) {
 
   for (int i = 0; i < _spec->numTargets; ++i) {
     auto& obj = _spec->targets[i];
-    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
+    targetImage.setFrame(static_cast<int>(obj.color) - 1);
     gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, targetImage);
   }
 
   for (int i = 0; i < _spec->numBoxes; ++i) {
-    _boxes[i].draw(x0, y0);
+    _boxes[i].draw(x0, y0, _player.bubbleColor());
   }
 
   _player.draw(x0, y0);
@@ -563,17 +558,11 @@ void Level::draw(int xOffset) {
     drawScore(xOffset);
   }
 
-//  if (_player.isAtGridPos()) {
-//    GridPos p = _player.gridPos();
-//    gb.display.printf("(%d,%d) = %d", p.x, p.y, _spec->grid.tiles[p.x + p.y * _spec->grid.w]);
-//  }
-
   for (int i = 0; i < _spec->numBubbles; ++i) {
     auto& obj = _spec->bubbles[i];
-    gb.display.colorIndex = const_cast<Color *>(palettes[static_cast<int>(obj.color)]);
-    gb.display.drawImage(x0 + obj.pos.x * 8, y0 + obj.pos.y * 8, bubbleImage);
+    bubbleImage.setFrame(static_cast<int>(obj.color) - 1);
+    gb.display.drawImage(x0 + obj.pos.x * 8 + 2, y0 + obj.pos.y * 8 + 2, bubbleImage);
   }
-  gb.display.colorIndex = PALETTE_DEFAULT;
 }
 
 void Game::initNextLevel() {

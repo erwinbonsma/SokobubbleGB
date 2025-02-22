@@ -146,6 +146,7 @@ public:
   Player(Level& level) : _level(level) {}
 
   int rotation() const { return _rotation; }
+  ObjectColor bubbleColor() const { return _bubble; }
 
   // Finish current move, but do not allow other moves
   void freeze();
@@ -166,7 +167,7 @@ public:
   ObjectColor color() const { return _color; }
   void moveStep(Direction dir);
 
-  void draw(int x0, int y0);
+  void draw(int x0, int y0, ObjectColor bubbleColor);
 };
 
 class Level {

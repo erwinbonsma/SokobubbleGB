@@ -6,7 +6,6 @@
 #include "Images.h"
 #include "Levels.h"
 #include "Music.h"
-#include "Palettes.h"
 #include "SoundFx.h"
 #include "Utils.h"
 
