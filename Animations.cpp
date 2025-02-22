@@ -7,6 +7,14 @@
 LevelDoneAnimation levelDoneAnim;
 LevelSlideAnimation levelSlideAnim;
 
+int ease(int x, int range) {
+  return (
+    x <= range / 2
+    ? x * x * 2 / range
+    : range - ease(range - x, range)
+  );
+}
+
 Animation* LevelDoneAnimation::update() {
   _step++;
 
@@ -47,7 +55,7 @@ Animation* LevelSlideAnimation::update() {
   ++_step;
 
   // TODO: easing
-  _offset = _step;
+  _offset = ease(_step, 80);
 
   return (_step == 80) ? nullptr : this;
 }
