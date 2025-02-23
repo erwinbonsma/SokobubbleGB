@@ -279,11 +279,58 @@ const ObjectSpec bubblesCoffee[] = {
   ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesCramped[] = {
+  0x28, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x29,
+  0x16,   -1,   -1,    0,    0,    0,   -1, 0x06,
+  0x16,   -1,    0,   -1,    0,    0,    0, 0x06,
+  0x16,   -1,   -1,   -1,    0,    0,    0, 0x06,
+  0x16,   -1,   -1,   -1,    0,    0,    0, 0x06,
+  0x16,    0,   -1,    0,    0,    0,    0, 0x06,
+  0x16,    0,   -1,    0,    0,    0,    0, 0x06,
+  0x2a, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x2b,
+};
+const ObjectSpec boxesCramped[] = {
+  ObjectSpec { .pos = GridPos(2, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsCramped[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 6), .color = ObjectColor::Red },
+};
+const ObjectSpec bubblesCramped[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 5), .color = ObjectColor::Red },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
     .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesBubbles },
-    .startPos = GridPos(1, 3),
+    .player = ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::None },
     .numBoxes = 2,
     .boxes = boxesBubbles,
     .numTargets = 2,
@@ -294,7 +341,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Targets",
     .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesTargets },
-    .startPos = GridPos(3, 3),
+    .player = ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::None },
     .numBoxes = 2,
     .boxes = boxesTargets,
     .numTargets = 4,
@@ -305,7 +352,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Order",
     .grid = GridSpec { .w = 8, .h = 6, .tiles = tilesOrder },
-    .startPos = GridPos(4, 2),
+    .player = ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::None },
     .numBoxes = 4,
     .boxes = boxesOrder,
     .numTargets = 4,
@@ -316,7 +363,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Overlap",
     .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesOverlap },
-    .startPos = GridPos(2, 2),
+    .player = ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::None },
     .numBoxes = 4,
     .boxes = boxesOverlap,
     .numTargets = 4,
@@ -327,7 +374,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Swap",
     .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesSwap },
-    .startPos = GridPos(1, 1),
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
     .numBoxes = 4,
     .boxes = boxesSwap,
     .numTargets = 4,
@@ -338,7 +385,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Barrier",
     .grid = GridSpec { .w = 8, .h = 7, .tiles = tilesBarrier },
-    .startPos = GridPos(1, 4),
+    .player = ObjectSpec { .pos = GridPos(1, 4), .color = ObjectColor::None },
     .numBoxes = 3,
     .boxes = boxesBarrier,
     .numTargets = 3,
@@ -349,7 +396,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Espresso",
     .grid = GridSpec { .w = 8, .h = 7, .tiles = tilesEspresso },
-    .startPos = GridPos(1, 1),
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
     .numBoxes = 4,
     .boxes = boxesEspresso,
     .numTargets = 4,
@@ -360,7 +407,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Enclosed",
     .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesEnclosed },
-    .startPos = GridPos(3, 3),
+    .player = ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::None },
     .numBoxes = 8,
     .boxes = boxesEnclosed,
     .numTargets = 8,
@@ -371,7 +418,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Swap 2",
     .grid = GridSpec { .w = 8, .h = 7, .tiles = tilesSwap2 },
-    .startPos = GridPos(1, 1),
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
     .numBoxes = 4,
     .boxes = boxesSwap2,
     .numTargets = 4,
@@ -382,12 +429,23 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Coffee",
     .grid = GridSpec { .w = 8, .h = 7, .tiles = tilesCoffee },
-    .startPos = GridPos(1, 1),
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
     .numBoxes = 8,
     .boxes = boxesCoffee,
     .numTargets = 8,
     .targets = targetsCoffee,
     .numBubbles = 4,
     .bubbles = bubblesCoffee,
+  },
+  LevelSpec {
+    .name = "Cramped",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesCramped },
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+    .numBoxes = 13,
+    .boxes = boxesCramped,
+    .numTargets = 13,
+    .targets = targetsCramped,
+    .numBubbles = 4,
+    .bubbles = bubblesCramped,
   },
 };

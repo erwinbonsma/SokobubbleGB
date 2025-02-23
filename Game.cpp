@@ -377,7 +377,7 @@ void Level::init(int levelIndex) {
 }
 
 void Level::start() {
-  _player.init(_spec->startPos);
+  _player.init(_spec->player.pos, _spec->player.color);
 
   for (int i = 0; i < _spec->numBoxes; i++) {
     _boxes[i].init(_spec->boxes[i].pos, _spec->boxes[i].color);

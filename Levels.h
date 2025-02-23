@@ -17,7 +17,7 @@ struct LevelSpec {
   const char* name;
   const GridSpec grid;
 
-  const GridPos startPos;
+  const ObjectSpec player;
 
   const uint8_t numBoxes;
   const ObjectSpec* boxes;
@@ -29,6 +29,6 @@ struct LevelSpec {
   const ObjectSpec* bubbles;
 };
 
-constexpr int maxBoxes = 8;
-constexpr int numLevels = 10;
+constexpr int maxBoxes = 13;
+constexpr int numLevels = 11;
 extern const LevelSpec levels[numLevels];
