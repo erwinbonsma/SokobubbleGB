@@ -180,6 +180,41 @@ const ObjectSpec bubblesEspresso[] = {
   ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesEnclosed[] = {
+  0x28, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x29,
+  0x16,   -1,    0,    0,    0,    0,   -1, 0x06,
+  0x16,    0,   -1,    0,    0,   -1,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,   -1,    0,    0,   -1,    0, 0x06,
+  0x16,   -1,    0,    0,    0,    0,   -1, 0x06,
+  0x2a, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x2b,
+};
+const ObjectSpec boxesEnclosed[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsEnclosed[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 6), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 6), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Red },
+};
+const ObjectSpec bubblesEnclosed[] = {
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -257,5 +292,16 @@ const LevelSpec levels[numLevels] = {
     .targets = targetsEspresso,
     .numBubbles = 4,
     .bubbles = bubblesEspresso,
+  },
+  LevelSpec {
+    .name = "Enclosed",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesEnclosed },
+    .startPos = GridPos(3, 3),
+    .numBoxes = 8,
+    .boxes = boxesEnclosed,
+    .numTargets = 8,
+    .targets = targetsEnclosed,
+    .numBubbles = 2,
+    .bubbles = bubblesEnclosed,
   },
 };
