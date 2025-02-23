@@ -488,7 +488,7 @@ void Level::drawScore(int xOffset) {
   gb.display.setColor(GRAY);
 
   gb.display.setCursor(x0, 8);
-  gb.display.printf("%3d", _levelIndex);
+  gb.display.printf("%3d", _levelIndex + 1);
 
   gb.display.setCursor(x0, 22);
   gb.display.printf("%03d", _moveCount);
