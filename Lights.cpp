@@ -14,22 +14,31 @@ const uint16_t gradientColors[numGradientColors] = {
   0xf81f, 0xf81a, 0xf815, 0xf80f, 0xf80a, 0xf805,
 };
 
-constexpr int numActivationLevels = 8;
-const uint16_t activationColors[numColors * numActivationLevels] = {
-  0x1800, 0x3800, 0x5800, 0x7800, 0x9800, 0xb800, 0xd800, 0xf800,
-  0x00e0, 0x01e0, 0x02e0, 0x03e0, 0x04e0, 0x05e0, 0x06e0, 0x07e0,
-  0x0003, 0x0007, 0x000b, 0x000f, 0x0013, 0x0017, 0x001b, 0x001f,
-  0x18e0, 0x39e0, 0x5ae0, 0x7be0, 0x9ce0, 0xbde0, 0xdee0, 0xffe0,
+struct RGB888 {
+	uint8_t r, g, b;
+};
+const RGB888 bubbleColors[numColors] = {
+  RGB888 { .r = 255, .g = 0, .b = 0 },
+  RGB888 { .r = 0, .g = 255, .b = 0 },
+  RGB888 { .r = 0, .g = 0, .b = 255 },
+  RGB888 { .r = 255, .g = 255, .b = 0 },
 };
 
-// The number of ticks before activation drops a level
-constexpr int activationTicks = 4;
+// How many ticks before activation dropped from max to min level
+constexpr int maxActivation = 32;
+
+constexpr uint8_t maxChannelVal = 255;
+constexpr uint8_t minChannelVal = 16;
+
+inline uint8_t scaleChannel(uint8_t channelVal, int activation) {
+  return channelVal * (minChannelVal + (maxChannelVal - minChannelVal) * activation) / maxActivation / maxChannelVal;
+}
 
 void Lights::changeColor(ObjectColor color) {
   _activeColor = color;
 
   // Ignored for None and Any, but no harm in setting it
-  _activation = numActivationLevels * activationTicks - 1;
+  _activation = maxActivation;
 }
 
 void Lights::update() {
@@ -44,10 +53,17 @@ void Lights::draw() {
     return;
   }
 
+  Color color;
+  if (_activeColor != ObjectColor::Any) {
+      RGB888 c = bubbleColors[static_cast<int>(_activeColor) - 1];
+      // Intensity, range = [minChannelVal, 255]
+      int i = minChannelVal + (256 - minChannelVal) * _activation / maxActivation;
+      color = gb.createColor(c.r * i / 256, c.g * i / 256, c.b * i / 256);
+  }
+
   for (int i = 8; --i >= 0; ) {
     int x = (i < 4) ? 0 : 1;
     int y = (i < 4) ? i : 7 - i;
-    Color color;
 
     if (_activeColor == ObjectColor::Any) {
       // The "chain" that is currently occupying this light-pixel
@@ -55,11 +71,6 @@ void Lights::draw() {
       int chainColorIndex =
         (gb.frameCount / 4 + chain * (numGradientColors / 2)) % numGradientColors;
       color = static_cast<Color>(gradientColors[chainColorIndex]);
-    } else {
-      int intensity = _activation / activationTicks;
-      color = static_cast<Color>(activationColors[
-        intensity + (static_cast<int>(_activeColor) - 1) * numActivationLevels
-      ]);
     }
 
     gb.lights.drawPixel(x, y, color);
