@@ -9,6 +9,7 @@
 #include "SoundFx.h"
 
 Game game;
+int maxCpuLoad = 0;
 
 const Vector2D dirVectors[4] = {
   Vector2D(0, -1), Vector2D(1, 0), Vector2D(0, 1), Vector2D(-1, 0)
@@ -484,7 +485,7 @@ void Level::drawScore(int xOffset) {
 
   // Faster fillRect
   int x = std::max(0, 64 + xOffset);
-  int xmax = std::min(79, 79 + xOffset);
+  int xmax = std::min(80, 80 + xOffset);
   while (x < xmax) {
     gb.display.drawLine(x, 0, x, 63);
     ++x;
@@ -501,13 +502,17 @@ void Level::drawScore(int xOffset) {
   gb.display.printf("%3d", _levelIndex + 1);
 
   gb.display.setCursor(x0, 22);
-  gb.display.printf("%03d", _moveCount);
+  gb.display.printf("%3d", _moveCount);
 
   gb.display.setCursor(x0, 36);
   gb.display.print("---");
 
+  int cpuLoad = gb.getCpuLoad();
   gb.display.setCursor(x0, 50);
-  gb.display.printf("%3d", gb.getCpuLoad());
+  gb.display.printf("%3d", cpuLoad);
+  maxCpuLoad = std::max(cpuLoad, maxCpuLoad);
+  gb.display.setCursor(x0, 56);
+  gb.display.printf("%3d", maxCpuLoad);
 
   gb.display.setColor(DARKGRAY);
   gb.display.setCursor(x0, 2);
