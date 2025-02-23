@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Levels.h"
+#include "Lights.h"
 #include "Utils.h"
 
 enum class Direction : uint8_t {
@@ -184,6 +185,7 @@ class Level {
   int _boxCount;
 
   bool _showScore;
+  Lights _lights;
 
   bool isDone();
 

@@ -47,6 +47,7 @@ inline Vector2D operator+(const Vector2D &lhs, const Vector2D &rhs) {
 
 typedef Vector2D GridPos;
 
+constexpr int numColors = 4;
 enum class ObjectColor : uint8_t {
   None = 0,
 

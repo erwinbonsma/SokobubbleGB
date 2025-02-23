@@ -2,6 +2,7 @@
 
 #include <Gamebuino-Meta.h>
 
+#include "Lights.h"
 #include "SoundFx.h"
 
 LevelDoneAnimation levelDoneAnim;
@@ -16,15 +17,27 @@ int ease(int x, int range) {
   );
 }
 
+void LevelDoneAnimation::init(Lights* lights) {
+  _lights = lights;
+  _step = 0;
+}
+
 Animation* LevelDoneAnimation::update() {
   _step++;
 
-  if (_step == 15) {
+  if (_step == 1) {
+    // Enable celebration lights
+    _lights->changeColor(ObjectColor::Any);
+  } else if (_step == 15) {
     gb.sound.fx(levelDoneSfx);
-  } else if (_step == 45) {
+  } else if (_step == 90) {
+    _lights->changeColor(ObjectColor::None);
+
     levelStartAnim.init();
     return &levelStartAnim;
   }
+
+  _lights->update();
 
   return this;
 }
@@ -91,7 +104,7 @@ Animation* LevelSlideAnimation::update() {
   ++_step;
 
   // TODO: easing
-  _offset = ease(_step, 80);
+  _offset = _step; //ease(_step, 80);
 
   return (_step == 80) ? nullptr : this;
 }

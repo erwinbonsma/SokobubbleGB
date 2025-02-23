@@ -319,7 +319,6 @@ void Player::update() {
     if (_moveAnim->step(*this, *_move)) {
       if (_move->_dstBub != _bubble) {
         _bubble = _move->_dstBub;
-        gb.sound.fx(bubbleChangeSfx);
       }
 
       _move = nullptr;
@@ -457,13 +456,20 @@ bool Level::isDone() {
 }
 
 Animation* Level::update() {
+  _lights.update();
+
+  ObjectColor oldBubble = _player.bubbleColor();
   _player.update();
+  if (oldBubble != _player.bubbleColor()) {
+    gb.sound.fx(bubbleChangeSfx);
+    _lights.changeColor(_player.bubbleColor());
+  }
 
   if (isDone()) {
     _player.freeze();
 
     if (!_player.isMoving()) {
-      levelDoneAnim.init();
+      levelDoneAnim.init(&_lights);
       return &levelDoneAnim;
     } else {
       // Wait for ongoing move to finish
@@ -558,6 +564,8 @@ void Level::draw(int xOffset) {
     bubbleImage.setFrame(static_cast<int>(obj.color) - 1);
     gb.display.drawImage(x0 + obj.pos.x * 8 + 2, y0 + obj.pos.y * 8 + 2, bubbleImage);
   }
+
+  _lights.draw();
 }
 
 void Game::initNextLevel() {

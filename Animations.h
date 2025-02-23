@@ -2,6 +2,8 @@
 
 #include "Game.h"
 
+class Lights;
+
 class Animation {
 public:
   // Executions an animation step. Returns the active animation.
@@ -13,10 +15,11 @@ public:
 };
 
 class LevelDoneAnimation : public Animation {
+  Lights* _lights;
   int _step;
 
 public:
-  void init() { _step = 0; }
+  void init(Lights* lights);
 
   Animation* update() override;
 };
