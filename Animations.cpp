@@ -44,6 +44,7 @@ Animation* LevelDoneAnimation::update() {
 
 void LevelStartAnimation::init() {
   Level* oldLevel = &game.level();
+  oldLevel->setShowScore(false);
   game.initNextLevel();
   levelSlideAnim.init(oldLevel, &game.level());
   game.level().setShowScore(false);
@@ -95,18 +96,16 @@ Animation* LevelSlideAnimation::update() {
 
   if (_step < 10) {
     _nameY = 3 - _step;
-  } else if (_step > 70) {
+  } else if (_step > 30) {
     _nameY = _step - 77;
   } else {
     _nameY = -99;
   }
 
   ++_step;
+  _offset = _step * 2;
 
-  // TODO: easing
-  _offset = _step; //ease(_step, 80);
-
-  return (_step == 80) ? nullptr : this;
+  return (_step == 40) ? nullptr : this;
 }
 
 void LevelSlideAnimation::draw() {
