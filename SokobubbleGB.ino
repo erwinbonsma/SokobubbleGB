@@ -9,8 +9,19 @@
 #include "SoundFx.h"
 #include "Utils.h"
 
+bool musicOn = false;
+
 UpdateFunction updateFunction;
 DrawFunction drawFunction;
+
+void toggleMusic() {
+  musicOn = !musicOn;
+  if (musicOn) {
+    gb.sound.playSong(song, true);
+  } else {
+    gb.sound.stopSong();
+  }
+}
 
 void draw() {
   game.draw();
@@ -18,6 +29,10 @@ void draw() {
 
 void update() {
   game.update();
+
+  if (gb.buttons.pressed(BUTTON_B)) {
+    toggleMusic();
+  }
 }
 
 void setup() {
@@ -28,8 +43,6 @@ void setup() {
   drawFunction = draw;
 
   game.level().init(0);
-
-  gb.sound.playSong(song, true);
 }
 
 void loop() {
