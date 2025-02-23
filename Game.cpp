@@ -481,7 +481,14 @@ Animation* Level::update() {
 
 void Level::drawScore(int xOffset) {
   gb.display.setColor(BLACK);
-  gb.display.fillRect(64 + xOffset, 0, 16, 64);
+
+  // Faster fillRect
+  int x = std::max(0, 64 + xOffset);
+  int xmax = std::min(79, 79 + xOffset);
+  while (x < xmax) {
+    gb.display.drawLine(x, 0, x, 63);
+    ++x;
+  }
 
   if (!_showScore) {
     return;
