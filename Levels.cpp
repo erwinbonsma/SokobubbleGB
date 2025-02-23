@@ -243,6 +243,42 @@ const ObjectSpec bubblesSwap2[] = {
   ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesCoffee[] = {
+  0x02, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x03,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x2a, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x2b,
+};
+const ObjectSpec boxesCoffee[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsCoffee[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Red },
+};
+const ObjectSpec bubblesCoffee[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -342,5 +378,16 @@ const LevelSpec levels[numLevels] = {
     .targets = targetsSwap2,
     .numBubbles = 4,
     .bubbles = bubblesSwap2,
+  },
+  LevelSpec {
+    .name = "Coffee",
+    .grid = GridSpec { .w = 8, .h = 7, .tiles = tilesCoffee },
+    .startPos = GridPos(1, 1),
+    .numBoxes = 8,
+    .boxes = boxesCoffee,
+    .numTargets = 8,
+    .targets = targetsCoffee,
+    .numBubbles = 4,
+    .bubbles = bubblesCoffee,
   },
 };
