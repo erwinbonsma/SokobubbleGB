@@ -338,20 +338,17 @@ void Player::draw(int x0, int y0) {
   } else {
     playerImage.setFrame(orientation * 5 + sector + 2);
   }
+  gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
 
   int palIdx;
   if (_retryCount > 0) {
     palIdx = 1 + (_retryCount / 2) % 4;
   } else {
-    palIdx = _bubble == ObjectColor::None ? 5 : static_cast<int>(_bubble);
+    palIdx = static_cast<int>(_bubble);
   }
-  // TODO: show bubble
-  gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
 
-//  gb.display.setCursor(0, 0);
-//  if (_move) {
-//    gb.display.printf("%d (%d,%d)", _move->_blocked, _move->_dstPos.x, _move->_dstPos.y);
-//  }
+  cockpitImage.setFrame(palIdx);
+  gb.display.drawImage(x0 + _pos.x + 3, y0 + _pos.y + 3, cockpitImage);
 }
 
 void Box::init(GridPos pos, ObjectColor color) {
