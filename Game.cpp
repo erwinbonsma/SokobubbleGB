@@ -6,6 +6,7 @@
 
 #include "Animations.h"
 #include "Images.h"
+#include "ProgressTracker.h"
 #include "SoundFx.h"
 
 Game game;
@@ -370,6 +371,7 @@ void Level::init(int levelIndex) {
   _levelIndex = levelIndex;
   _spec = &levels[levelIndex];
   _showScore = true;
+  _bestMoveCount = progressTracker.getLevelMinMoves(levelIndex);
 
   drawFixed(_fixedImage);
 
@@ -505,7 +507,11 @@ void Level::drawScore(int xOffset) {
   gb.display.printf("%3d", _moveCount);
 
   gb.display.setCursor(x0, 36);
-  gb.display.print("---");
+  if (_bestMoveCount != 0) {
+    gb.display.printf("%3d", _bestMoveCount);
+  } else {
+    gb.display.print("  -");
+  }
 
   int cpuLoad = gb.getCpuLoad();
   gb.display.setCursor(x0, 50);

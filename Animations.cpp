@@ -3,6 +3,7 @@
 #include <Gamebuino-Meta.h>
 
 #include "Lights.h"
+#include "ProgressTracker.h"
 #include "SoundFx.h"
 
 LevelDoneAnimation levelDoneAnim;
@@ -25,12 +26,37 @@ void LevelDoneAnimation::init(Lights* lights) {
 Animation* LevelDoneAnimation::update() {
   _step++;
 
+  bool done = false;
+
   if (_step == 1) {
     // Enable celebration lights
     _lights->changeColor(ObjectColor::Any);
   } else if (_step == 15) {
     gb.sound.fx(levelDoneSfx);
   } else if (_step == 90) {
+    auto& level = game.level();
+    bool improvedHi = progressTracker.markLevelSolved(
+      level.levelIndex(), level.getMoveCount()
+    );
+
+    if (improvedHi) {
+      gb.sound.fx(newHiSfx);
+    } else {
+      done = true;
+    }
+  } else if (_step == 140) {
+    auto& level = game.level();
+
+    if (level.getBestMoveCount() <= level.getMoveCount()) {
+      done = true;
+    } else {
+      level.decBestMoveCount();
+      gb.sound.fx(pushStartSfx);
+      _step = 130;
+    }
+  }
+
+  if (done) {
     _lights->changeColor(ObjectColor::None);
 
     levelStartAnim.init();
@@ -90,10 +116,6 @@ void LevelSlideAnimation::init(Level* levelL, Level* levelR, bool leftToRight) {
 }
 
 Animation* LevelSlideAnimation::update() {
-  if (_step == 0) {
-    gb.sound.fx(pushStartSfx);
-  }
-
   if (_step < 10) {
     _nameY = 3 - _step;
   } else if (_step > 30) {

@@ -19,13 +19,16 @@ struct LevelSpec {
 
   const ObjectSpec player;
 
-  const uint8_t numBoxes;
-  const ObjectSpec* boxes;
-  
-  const uint8_t numTargets;
-  const ObjectSpec* targets;
+  // Used for storing progress. Helps to retain scores when levels are
+  // re-ordered or only a few levels are changed.
+  const uint8_t saveSlot;
 
+  const uint8_t numBoxes;
+  const uint8_t numTargets;
   const uint8_t numBubbles;
+
+  const ObjectSpec* boxes;
+  const ObjectSpec* targets;
   const ObjectSpec* bubbles;
 };
 

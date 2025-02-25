@@ -180,6 +180,7 @@ class Level {
   Player _player;
   Box _boxes[maxBoxes];
   int _moveCount;
+  int _bestMoveCount;
 
   // The number of correctly placed boxes
   int _boxCount;
@@ -207,6 +208,9 @@ public:
 
   void start();
   void incMoveCount() { _moveCount++; }
+  void decBestMoveCount() { _bestMoveCount--; }
+  int getMoveCount() const { return _moveCount; }
+  int getBestMoveCount() const { return _bestMoveCount; }
   void setShowScore(bool show) { _showScore = show; }
 
   Animation* update();
