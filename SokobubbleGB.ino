@@ -35,6 +35,9 @@ void setup() {
   gb.begin();
   gb.setFrameRate(30);
 
+  progressTracker.init();
+  progressTracker.dump();
+
   game.level().init(progressTracker.getMaxLevelIndex());
   levelMenu.init();
   scene = &levelMenu;

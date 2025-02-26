@@ -24,6 +24,7 @@ void ProgressTracker::init() {
   _totalMoves = 0;
 
   if (gb.save.get(SAVEINDEX_VMAJOR) != VMAJOR) {
+    SerialUSB.print("Version mismatch, clearing progress\n");
     clearStoredMoveCounts();
   } else {
     for (int i = 0; i < numLevels; i++) {
