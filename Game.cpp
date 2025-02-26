@@ -23,18 +23,6 @@ const std::pair<Button, Direction> buttonMap[] = {
   { BUTTON_LEFT, Direction::Left },
 };
 
-void drawLevelName(Level* level, int xOffset, int y) {
-  int w = strlen(level->name());
-
-  gb.display.setColor(BLUE);
-  gb.display.fillRoundRect(32 - w * 2 - 2 + xOffset, y, w * 4 + 4, 7, 1);
-
-  gb.display.setTextWrap(false);
-  gb.display.setCursor(32 - w * 2 + xOffset, y + 1);
-  gb.display.setColor(DARKBLUE);
-  gb.display.print(level->name());
-}
-
 void Move::init(Direction dir) {
   _dir = dir;
 
@@ -481,16 +469,18 @@ Animation* Level::update() {
   return nullptr;
 }
 
-void Level::drawInfoPanelBackground(int xOffset) {
-  gb.display.setColor(BLACK);
+void Level::drawName(int xOffset, int yOffset) {
+  int w = strlen(_spec->name);
+  int x = 32 - w * 2 + xOffset;
+  int y = 2 + yOffset;
 
-  // Faster fillRect
-  int x = std::max(0, 64 + xOffset);
-  int xmax = std::min(80, 80 + xOffset);
-  while (x < xmax) {
-    gb.display.drawLine(x, 0, x, 63);
-    ++x;
-  }
+  gb.display.setColor(BLUE);
+  gb.display.fillRoundRect(x - 2, y, w * 4 + 4, 7, 1);
+
+  gb.display.setTextWrap(false);
+  gb.display.setCursor(x, y + 1);
+  gb.display.setColor(DARKBLUE);
+  gb.display.print(_spec->name);
 }
 
 void Level::drawInfoPanelText() {
@@ -572,7 +562,9 @@ void Level::draw(int xOffset) {
 
   _player.draw(x0, y0);
 
-  drawInfoPanelBackground(xOffset);
+  // Clear info panel background
+  gb.display.setColor(BLACK);
+  fillFastVRect(64 + xOffset, 16);
 
   for (int i = 0; i < _spec->numBubbles; ++i) {
     auto& obj = _spec->bubbles[i];

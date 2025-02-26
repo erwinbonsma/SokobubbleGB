@@ -29,7 +29,11 @@ void LevelMenu::draw() {
   if (_slideAnim) {
     _slideAnim->draw();
   } else {
+    gb.display.setColor(BLACK);
+    fillFastVRect(0, 8);
+
     game.level().draw(8);
+    game.level().drawName(8);
   }
 }
 

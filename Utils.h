@@ -1,8 +1,6 @@
 #pragma once
 
 #include <Gamebuino-Meta.h>
-#undef min
-#undef max
 
 #define CALL_MEMBER_FN(object, ptrToMember)  ((object).*(ptrToMember))
 
@@ -11,6 +9,8 @@ public:
   virtual Scene* update() = 0;
   virtual void draw() = 0;
 };
+
+void fillFastVRect(int x0, int w);
 
 void assertFailed(const char *function, const char *file, int lineNo, const char *expression);
 

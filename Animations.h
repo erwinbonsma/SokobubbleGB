@@ -34,7 +34,7 @@ class LevelSlideAnimation : public Animation {
   int _offset;
 
   // TODO: Switch to std::optional once supported
-  int _nameY;
+  int _yOffsetName;
 
   int addDirection(int offset) const { return _leftToRight ? offset : 80 - offset; }
   int addCentering(int offset) const { return offset + _centerLevel * 8; }
@@ -56,7 +56,7 @@ public:
 
 class LevelStartAnimation : public Animation {
   LevelSlideAnimation* _slideAnim;
-  int _nameY;
+  int _yOffsetName;
 
 public:
   void init();

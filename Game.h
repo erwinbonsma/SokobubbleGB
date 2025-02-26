@@ -18,8 +18,6 @@ class Box;
 class Level;
 class Player;
 
-void drawLevelName(Level* level, int xOffset, int y);
-
 class Move {
   friend class Player;
 
@@ -189,7 +187,6 @@ class Level {
 
   bool isDone();
 
-  void drawInfoPanelBackground(int xOffset);
   void drawFixed(Gamebuino_Meta::Graphics& graphics);
 
 public:
@@ -198,7 +195,6 @@ public:
   void init(int levelIndex);
 
   int levelIndex() const { return _levelIndex; }
-  const char* name() const { return _spec->name; }
 
   Box* boxAt(GridPos pos);
   ObjectColor bubbleAt(GridPos pos) const;
@@ -213,7 +209,9 @@ public:
 
   Animation* update();
   void draw(int xOffset = 0);
+
   void drawInfoPanelText();
+  void drawName(int xOffset = 0, int yOffset = 0);
 };
 
 class Game : public Scene {

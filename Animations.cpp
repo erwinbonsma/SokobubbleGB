@@ -73,7 +73,7 @@ void LevelStartAnimation::init() {
   game.initNextLevel();
   levelSlideAnim.init(oldLevel, &game.level());
   _slideAnim = &levelSlideAnim;
-  _nameY = 2;
+  _yOffsetName = 0;
 }
 
 Animation* LevelStartAnimation::update() {
@@ -82,8 +82,8 @@ Animation* LevelStartAnimation::update() {
     return this;
   }
 
-  _nameY--;
-  if (_nameY == -7) {
+  _yOffsetName--;
+  if (_yOffsetName == -9) {
     gb.sound.fx(getReadySfx);
     return nullptr;
   }
@@ -100,7 +100,7 @@ void LevelStartAnimation::draw() {
     game.level().draw();
   }
 
-  drawLevelName(&game.level(), offset, _nameY);
+  game.level().drawName(offset, _yOffsetName);
 }
 
 void LevelSlideAnimation::init(Level* levelL, Level* levelR) {
@@ -117,11 +117,11 @@ void LevelSlideAnimation::init(Level* levelL, Level* levelR) {
 
 Animation* LevelSlideAnimation::update() {
   if (_step < 10) {
-    _nameY = 3 - _step;
+    _yOffsetName = -_step;
   } else if (_step > 30) {
-    _nameY = _step - 77;
+    _yOffsetName = _step - 40;
   } else {
-    _nameY = -99;
+    _yOffsetName = -99;
   }
 
   ++_step;
@@ -134,5 +134,17 @@ void LevelSlideAnimation::draw() {
   _levelL->draw(offsetLeft());
   _levelR->draw(offsetRight());
 
-  // TODO: Draw level name
+  if (_centerLevel) {
+    // Ensure background left of left level is cleared
+    gb.display.setColor(BLACK);
+    fillFastVRect(offsetLeft() - 8, 8);
+  }
+
+  if (_yOffsetName != -99) {
+    if ((_offset < 40) == _leftToRight) {
+      _levelL->drawName(offsetLeft(), _yOffsetName);
+    } else {
+      _levelR->drawName(offsetRight(), _yOffsetName);
+    }
+  }
 }
