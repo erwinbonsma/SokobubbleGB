@@ -573,9 +573,10 @@ void Level::draw(int xOffset) {
   gb.display.setColor(BLACK);
   fillFastVRect(64 + xOffset, 16);
 
+  int bubbleOffset = ((gb.frameCount / 30) % 2) * 4 - 1;
   for (int i = 0; i < _spec->numBubbles; ++i) {
     auto& obj = _spec->bubbles[i];
-    bubbleImage.setFrame(static_cast<int>(obj.color) - 1);
+    bubbleImage.setFrame(static_cast<int>(obj.color) + bubbleOffset);
     gb.display.drawImage(x0 + obj.pos.x * 8 + 2, y0 + obj.pos.y * 8 + 2, bubbleImage);
   }
 
