@@ -474,7 +474,7 @@ Animation* Level::update() {
 }
 
 void Level::drawName(int xOffset, int yOffset) {
-  char buf[10];
+  char buf[12];
   snprintf(buf, sizeof(buf), "%d.%s", _levelIndex + 1, _spec->name);
 
   int w = strlen(buf);
