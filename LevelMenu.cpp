@@ -2,6 +2,7 @@
 
 #include "Images.h"
 #include "Game.h"
+#include "ProgressTracker.h"
 #include "SoundFx.h"
 
 void LevelMenu::init() {
@@ -27,17 +28,20 @@ void LevelMenu::update() {
     _xOffset--;
   } else if (_slideAnim) {
     _slideAnim = static_cast<LevelSlideAnimation *>(_slideAnim->update());
-  } else if (gb.buttons.pressed(BUTTON_LEFT)) {
+  } else if (
+    gb.buttons.pressed(BUTTON_LEFT) || gb.buttons.pressed(BUTTON_RIGHT)
+  ) {
     Level* oldLevel = &game.level();
-    game.initLevel((oldLevel->levelIndex() + numLevels - 1) % numLevels);
-    levelSlideAnim.init(&game.level(), oldLevel);
-    levelSlideAnim.setRightToLeft();
+    int m = progressTracker.getMaxLevelIndex() + 1;
 
-    startSlideTransition();
-  } else if (gb.buttons.pressed(BUTTON_RIGHT)) {
-    Level* oldLevel = &game.level();
-    game.initLevel((oldLevel->levelIndex() + 1) % numLevels);
-    levelSlideAnim.init(oldLevel, &game.level());
+    if (gb.buttons.pressed(BUTTON_LEFT)) {
+      game.initLevel((oldLevel->levelIndex() + m - 1) % m);
+      levelSlideAnim.init(&game.level(), oldLevel);
+      levelSlideAnim.setRightToLeft();
+    } else {
+      game.initLevel((oldLevel->levelIndex() + 1) % m);
+      levelSlideAnim.init(oldLevel, &game.level());
+    }
 
     startSlideTransition();
   } else if (gb.buttons.pressed(BUTTON_A)) {
