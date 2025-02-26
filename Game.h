@@ -185,12 +185,11 @@ class Level {
   // The number of correctly placed boxes
   int _boxCount;
 
-  bool _showScore;
   Lights _lights;
 
   bool isDone();
 
-  void drawScore(int xOffset);
+  void drawInfoPanelBackground(int xOffset);
   void drawFixed(Gamebuino_Meta::Graphics& graphics);
 
 public:
@@ -211,10 +210,10 @@ public:
   void decBestMoveCount() { _bestMoveCount--; }
   int getMoveCount() const { return _moveCount; }
   int getBestMoveCount() const { return _bestMoveCount; }
-  void setShowScore(bool show) { _showScore = show; }
 
   Animation* update();
   void draw(int xOffset = 0);
+  void drawInfoPanelText();
 };
 
 class Game {

@@ -370,7 +370,6 @@ void Box::draw(int x0, int y0, ObjectColor bubbleColor) {
 void Level::init(int levelIndex) {
   _levelIndex = levelIndex;
   _spec = &levels[levelIndex];
-  _showScore = true;
   _bestMoveCount = progressTracker.getLevelMinMoves(levelIndex);
 
   drawFixed(_fixedImage);
@@ -482,7 +481,7 @@ Animation* Level::update() {
   return nullptr;
 }
 
-void Level::drawScore(int xOffset) {
+void Level::drawInfoPanelBackground(int xOffset) {
   gb.display.setColor(BLACK);
 
   // Faster fillRect
@@ -492,12 +491,10 @@ void Level::drawScore(int xOffset) {
     gb.display.drawLine(x, 0, x, 63);
     ++x;
   }
+}
 
-  if (!_showScore) {
-    return;
-  }
-
-  int x0 = 67 + xOffset;
+void Level::drawInfoPanelText() {
+  int x0 = 67;
   gb.display.setColor(GRAY);
 
   gb.display.setCursor(x0, 8);
@@ -575,7 +572,7 @@ void Level::draw(int xOffset) {
 
   _player.draw(x0, y0);
 
-  drawScore(xOffset);
+  drawInfoPanelBackground(xOffset);
 
   for (int i = 0; i < _spec->numBubbles; ++i) {
     auto& obj = _spec->bubbles[i];
@@ -605,5 +602,6 @@ void Game::draw() {
     _animation->draw();
   } else {
     level().draw();
+    level().drawInfoPanelText();
   }
 }

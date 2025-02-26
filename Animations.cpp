@@ -70,10 +70,8 @@ Animation* LevelDoneAnimation::update() {
 
 void LevelStartAnimation::init() {
   Level* oldLevel = &game.level();
-  oldLevel->setShowScore(false);
   game.initNextLevel();
   levelSlideAnim.init(oldLevel, &game.level());
-  game.level().setShowScore(false);
   _slideAnim = &levelSlideAnim;
   _nameY = 2;
 }
@@ -86,7 +84,6 @@ Animation* LevelStartAnimation::update() {
 
   _nameY--;
   if (_nameY == -7) {
-    game.level().setShowScore(true);
     gb.sound.fx(getReadySfx);
     return nullptr;
   }
