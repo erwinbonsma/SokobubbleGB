@@ -6,12 +6,11 @@
 
 #define CALL_MEMBER_FN(object, ptrToMember)  ((object).*(ptrToMember))
 
-typedef void (*UpdateFunction)();
-typedef void (*DrawFunction)();
-
-// Defined in .ino file. Declared here for convenience
-extern UpdateFunction updateFunction;
-extern DrawFunction drawFunction;
+class Scene {
+public:
+  virtual void update() = 0;
+  virtual void draw() = 0;
+};
 
 void assertFailed(const char *function, const char *file, int lineNo, const char *expression);
 

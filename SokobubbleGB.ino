@@ -10,9 +10,7 @@
 #include "Utils.h"
 
 bool musicOn = false;
-
-UpdateFunction updateFunction;
-DrawFunction drawFunction;
+Scene* scene;
 
 void toggleMusic() {
   musicOn = !musicOn;
@@ -24,11 +22,11 @@ void toggleMusic() {
 }
 
 void draw() {
-  game.draw();
+  scene->draw();
 }
 
 void update() {
-  game.update();
+  scene->update();
 
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();
@@ -39,15 +37,13 @@ void setup() {
   gb.begin();
   gb.setFrameRate(30);
 
-  updateFunction = update;
-  drawFunction = draw;
-
   game.level().init(0);
+  scene = &game;
 }
 
 void loop() {
   while(!gb.update());
 
-  updateFunction();
-  drawFunction();
+  update();
+  draw();
 }

@@ -216,7 +216,7 @@ public:
   void drawInfoPanelText();
 };
 
-class Game {
+class Game : public Scene {
   // Uses two levels so enable slide animation from old to new one
   Level _level1;
   Level _level2;
@@ -233,8 +233,8 @@ public:
 
   void setAnimation(Animation* animation) { _animation = animation; }
 
-  void update();
-  void draw();
+  void update() override;
+  void draw() override;
 };
 
 extern Game game;
