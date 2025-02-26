@@ -24,7 +24,7 @@ void draw() {
 }
 
 void update() {
-  scene = scene->update();
+  scene->update();
 
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();

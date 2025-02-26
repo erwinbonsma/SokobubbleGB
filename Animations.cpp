@@ -2,6 +2,7 @@
 
 #include <Gamebuino-Meta.h>
 
+#include "LevelMenu.h"
 #include "Lights.h"
 #include "ProgressTracker.h"
 #include "SoundFx.h"
@@ -10,6 +11,7 @@ LevelDoneAnimation levelDoneAnim;
 NextLevelAnimation nextLevelAnim;
 StartLevelAnimation startLevelAnim;
 LevelSlideAnimation levelSlideAnim;
+RetryAnimation retryAnim;
 
 int ease(int x, int range) {
   return (
@@ -166,4 +168,49 @@ void LevelSlideAnimation::draw() {
       _levelR->drawName(offsetRight(), _yOffsetName);
     }
   }
+}
+
+void RetryAnimation::init() {
+  _step = 0;
+  _xOffset = 0;
+}
+
+Animation* RetryAnimation::update() {
+  if (_xOffset != 0) {
+    if (_xOffset < 8) {
+      _xOffset++;
+      return this;
+    } else {
+      levelMenu.init();
+      scene = &levelMenu;
+      return nullptr;
+    }
+  }
+
+  if (_step == 0) {
+    gb.sound.fx(giveUpSfx);
+  }
+
+  _step++;
+
+  if (_step == 30) {
+    Level& level = game.level();
+    if (level.getMoveCount() == 0) {
+      // Start slide for clean transition into level menu
+      _xOffset++;
+    } else {
+      level.start();
+      return nullptr;
+    }
+
+  }
+
+  return this;
+}
+
+void RetryAnimation::draw() {
+  gb.display.setColor(BLACK);
+  fillFastVRect(0, _xOffset);
+
+  game.level().draw(_xOffset);
 }

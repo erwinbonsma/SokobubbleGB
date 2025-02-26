@@ -6,6 +6,7 @@
 
 void LevelMenu::init() {
   _xOffset = 8;
+  _slideAnim = nullptr;
 }
 
 void LevelMenu::startSlideTransition() {
@@ -17,11 +18,11 @@ void LevelMenu::startSlideTransition() {
   gb.sound.fx(pushStartSfx);
 }
 
-Scene* LevelMenu::update() {
+void LevelMenu::update() {
   if (_xOffset == 0) {
     startLevelAnim.init();
     game.setAnimation(&startLevelAnim);
-    return &game;
+    scene = &game;
   } else if (_xOffset != 8) {
     _xOffset--;
   } else if (_slideAnim) {
@@ -42,8 +43,6 @@ Scene* LevelMenu::update() {
   } else if (gb.buttons.pressed(BUTTON_A)) {
     _xOffset--;
   }
-
-  return this;
 }
 
 void LevelMenu::draw() {

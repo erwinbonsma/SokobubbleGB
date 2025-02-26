@@ -260,7 +260,7 @@ void Player::freeze() {
   _moveNext = nullptr;
 }
 
-void Player::handleMoveInput() {
+bool Player::handleMoveInput() {
   for (auto& pair : buttonMap) {
     if (
       gb.buttons.pressed(pair.first)
@@ -280,9 +280,8 @@ void Player::handleMoveInput() {
 
   if (gb.buttons.repeat(BUTTON_A, 0)) {
     if (_retryCount != -1 && ++_retryCount > 30) {
-      gb.sound.fx(giveUpSfx);
-      _level.start();
-      return;
+      _retryCount = 0; // Disable retry-drawing mode
+      return false;
     }
   } else {
     _retryCount = 0;
@@ -298,23 +297,30 @@ void Player::handleMoveInput() {
       }
     }
   }
+
+  return true;
 }
 
-void Player::update() {
-  if (!_frozen) {
-    handleMoveInput();
+bool Player::update() {
+  if (!_frozen && !handleMoveInput()) {
+    return false;
   }
 
   if (_move) {
     if (_moveAnim->step(*this, *_move)) {
       if (_move->_dstBub != _bubble) {
         _bubble = _move->_dstBub;
+
+        gb.sound.fx(bubbleChangeSfx);
+        _level.lights().changeColor(_bubble);
       }
 
       _move = nullptr;
       _moveAnim = nullptr;
     }
   }
+
+  return true;
 }
 
 void Player::draw(int x0, int y0) {
@@ -448,11 +454,9 @@ bool Level::isDone() {
 Animation* Level::update() {
   _lights.update();
 
-  ObjectColor oldBubble = _player.bubbleColor();
-  _player.update();
-  if (oldBubble != _player.bubbleColor()) {
-    gb.sound.fx(bubbleChangeSfx);
-    _lights.changeColor(_player.bubbleColor());
+  if (!_player.update()) {
+    retryAnim.init();
+    return &retryAnim;
   }
 
   if (isDone()) {
@@ -585,14 +589,12 @@ void Game::initNextLevel() {
   initLevel(nxtIndex);
 }
 
-Scene* Game::update() {
+void Game::update() {
   if (_animation) {
     _animation = _animation->update();
   } else {
     _animation = level().update();
   }
-
-  return this;
 }
 
 void Game::draw() {

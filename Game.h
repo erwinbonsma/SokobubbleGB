@@ -109,8 +109,8 @@ class Player : public Moveable {
   Move* _moveNext;
   MoveAnimation* _moveAnim;
 
-  int _moveNextExpiry;
-  int _retryCount;
+  int8_t _moveNextExpiry;
+  int8_t _retryCount;
 
   bool _frozen;
 
@@ -139,7 +139,8 @@ class Player : public Moveable {
 
   bool pushContinues();
 
-  void handleMoveInput();
+  // Returns true when game play should continue
+  bool handleMoveInput();
 
 public:
   Player(Level& level) : _level(level) {}
@@ -152,8 +153,7 @@ public:
   bool isMoving() const { return _move != nullptr; };
 
   void init(GridPos pos, ObjectColor bubble = ObjectColor::None);
-  void update();
-
+  bool update();
   void draw(int x0, int y0);
 };
 
@@ -201,6 +201,7 @@ public:
   ObjectColor targetAt(GridPos pos) const;
   bool isWall(GridPos pos) const;
 
+  Lights& lights() { return _lights; }
   void start();
   void incMoveCount() { _moveCount++; }
   void decBestMoveCount() { _bestMoveCount--; }
@@ -232,7 +233,7 @@ public:
 
   void setAnimation(Animation* animation) { _animation = animation; }
 
-  Scene* update() override;
+  void update() override;
   void draw() override;
 };
 

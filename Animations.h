@@ -77,7 +77,19 @@ public:
   void draw() override;
 };
 
+class RetryAnimation : public Animation {
+  int _step;
+  int _xOffset;
+
+public:
+  void init();
+
+  Animation* update() override;
+  void draw() override;
+};
+
 extern LevelDoneAnimation levelDoneAnim;
 extern NextLevelAnimation nextLevelAnim;
 extern StartLevelAnimation startLevelAnim;
 extern LevelSlideAnimation levelSlideAnim;
+extern RetryAnimation retryAnim;

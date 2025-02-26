@@ -12,7 +12,7 @@ class LevelMenu : public Scene {
 public:
   void init();
 
-  Scene* update() override;
+  void update() override;
   void draw() override;
 };
 

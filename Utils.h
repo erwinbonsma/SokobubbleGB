@@ -6,9 +6,11 @@
 
 class Scene {
 public:
-  virtual Scene* update() = 0;
+  virtual void update() = 0;
   virtual void draw() = 0;
 };
+
+extern Scene* scene;
 
 void fillFastVRect(int x0, int w);
 
