@@ -474,7 +474,10 @@ Animation* Level::update() {
 }
 
 void Level::drawName(int xOffset, int yOffset) {
-  int w = strlen(_spec->name);
+  char buf[10];
+  snprintf(buf, sizeof(buf), "%d.%s", _levelIndex + 1, _spec->name);
+
+  int w = strlen(buf);
   int x = 32 - w * 2 + xOffset;
   int y = 2 + yOffset;
 
@@ -484,7 +487,7 @@ void Level::drawName(int xOffset, int yOffset) {
   gb.display.setTextWrap(false);
   gb.display.setCursor(x, y + 1);
   gb.display.setColor(DARKBLUE);
-  gb.display.print(_spec->name);
+  gb.display.print(buf);
 }
 
 void Level::drawInfoPanelText() {
