@@ -5,8 +5,11 @@
 
 class LevelMenu : public Scene {
   LevelSlideAnimation* _slideAnim;
+  int _xOffset;
 
 public:
+  void init();
+
   Scene* update() override;
   void draw() override;
 };

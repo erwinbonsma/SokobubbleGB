@@ -2,15 +2,23 @@
 
 #include "Game.h"
 
+void LevelMenu::init() {
+  _xOffset = 8;
+}
+
 Scene* LevelMenu::update() {
-  if (_slideAnim) {
+  if (_xOffset == 0) {
+    return &game;
+  } else if (_xOffset != 8) {
+    _xOffset--;
+  } else if (_slideAnim) {
     _slideAnim = static_cast<LevelSlideAnimation *>(_slideAnim->update());
   } else if (gb.buttons.pressed(BUTTON_LEFT)) {
     Level* oldLevel = &game.level();
     game.initLevel((oldLevel->levelIndex() + numLevels - 1) % numLevels);
     levelSlideAnim.init(&game.level(), oldLevel);
-    levelSlideAnim.setRightToLeft();
     levelSlideAnim.setCenterLevel();
+    levelSlideAnim.setRightToLeft();
     _slideAnim = &levelSlideAnim;
   } else if (gb.buttons.pressed(BUTTON_RIGHT)) {
     Level* oldLevel = &game.level();
@@ -19,7 +27,7 @@ Scene* LevelMenu::update() {
     levelSlideAnim.setCenterLevel();
     _slideAnim = &levelSlideAnim;
   } else if (gb.buttons.pressed(BUTTON_A)) {
-    return &game;
+    _xOffset--;
   }
 
   return this;
@@ -30,10 +38,10 @@ void LevelMenu::draw() {
     _slideAnim->draw();
   } else {
     gb.display.setColor(BLACK);
-    fillFastVRect(0, 8);
+    fillFastVRect(0, _xOffset);
 
-    game.level().draw(8);
-    game.level().drawName(8);
+    game.level().draw(_xOffset);
+    game.level().drawName(_xOffset);
   }
 }
 
