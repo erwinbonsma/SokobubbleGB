@@ -495,7 +495,7 @@ const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "RGB",
     .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesRGB },
-    .player = ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::None },
+    .player = ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::None },
     .saveSlot = 12,
     .numBoxes = 3,
     .numTargets = 3,
