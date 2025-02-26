@@ -443,10 +443,10 @@ bool Level::isDone() {
     }
   }
 
-  if (boxCount != _boxCount) {
-    _boxCount = boxCount;
+  if (boxCount > _boxCount) {
     gb.sound.fx(boxPlacedSfx);
   }
+  _boxCount = boxCount;
 
   return _boxCount == _spec->numBoxes;
 }
