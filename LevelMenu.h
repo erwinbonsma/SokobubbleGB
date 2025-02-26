@@ -6,6 +6,7 @@
 class LevelMenu : public Scene {
   LevelSlideAnimation* _slideAnim;
   int _xOffset;
+  int _numSelectable;
 
   void startSlideTransition();
 
