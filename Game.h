@@ -229,11 +229,12 @@ public:
 
   // Initialises the next level, which is available via level().
   // The previous level is still available.
+  void initLevel(int levelIndex);
   void initNextLevel();
 
   void setAnimation(Animation* animation) { _animation = animation; }
 
-  void update() override;
+  Scene* update() override;
   void draw() override;
 };
 

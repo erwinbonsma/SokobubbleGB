@@ -583,18 +583,24 @@ void Level::draw(int xOffset) {
   _lights.draw();
 }
 
-void Game::initNextLevel() {
-  int nxtIndex = (level().levelIndex() + 1) % numLevels;
+void Game::initLevel(int levelIndex) {
   _levelToggle = !_levelToggle;
-  level().init(nxtIndex);
+  level().init(levelIndex);
 }
 
-void Game::update() {
+void Game::initNextLevel() {
+  int nxtIndex = (level().levelIndex() + 1) % numLevels;
+  initLevel(nxtIndex);
+}
+
+Scene* Game::update() {
   if (_animation) {
     _animation = _animation->update();
   } else {
     _animation = level().update();
   }
+
+  return this;
 }
 
 void Game::draw() {

@@ -103,10 +103,13 @@ void LevelStartAnimation::draw() {
   drawLevelName(&game.level(), offset, _nameY);
 }
 
-void LevelSlideAnimation::init(Level* levelL, Level* levelR, bool leftToRight) {
+void LevelSlideAnimation::init(Level* levelL, Level* levelR) {
   _levelL = levelL;
   _levelR = levelR;
-  _leftToRight = leftToRight;
+
+  // Set defaults
+  _leftToRight = true;
+  _centerLevel = false;
 
   _step = 0;
   _offset = 0;
@@ -128,8 +131,6 @@ Animation* LevelSlideAnimation::update() {
 }
 
 void LevelSlideAnimation::draw() {
-  int offset = _leftToRight ? _offset : 80 - _offset;
-
   _levelL->draw(offsetLeft());
   _levelR->draw(offsetRight());
 

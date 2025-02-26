@@ -28,6 +28,7 @@ class LevelSlideAnimation : public Animation {
   Level* _levelL;
   Level* _levelR;
   bool _leftToRight;
+  bool _centerLevel;
 
   int _step;
   int _offset;
@@ -35,11 +36,17 @@ class LevelSlideAnimation : public Animation {
   // TODO: Switch to std::optional once supported
   int _nameY;
 
-public:
-  void init(Level* levelL, Level* levelR, bool leftToRight = true);
+  int addDirection(int offset) const { return _leftToRight ? offset : 80 - offset; }
+  int addCentering(int offset) const { return offset + _centerLevel * 8; }
 
-  int offsetLeft() const { return -_offset; }
-  int offsetRight() const { return 80 - _offset; }
+public:
+  void init(Level* levelL, Level* levelR);
+
+  void setRightToLeft() { _leftToRight = false; }
+  void setCenterLevel() { _centerLevel = true; }
+
+  int offsetLeft() const { return addCentering(-addDirection(_offset)); }
+  int offsetRight() const { return addCentering(80 - addDirection(_offset)); }
 
   Animation* update() override;
 

@@ -2,11 +2,9 @@
 
 #include <utility>
 
-#include "Game.h"
-#include "Images.h"
-#include "Levels.h"
+#include "LevelMenu.h"
 #include "Music.h"
-#include "SoundFx.h"
+#include "ProgressTracker.h"
 #include "Utils.h"
 
 bool musicOn = false;
@@ -26,7 +24,7 @@ void draw() {
 }
 
 void update() {
-  scene->update();
+  scene = scene->update();
 
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();
@@ -37,8 +35,8 @@ void setup() {
   gb.begin();
   gb.setFrameRate(30);
 
-  game.level().init(0);
-  scene = &game;
+  game.level().init(progressTracker.getMaxLevelIndex());
+  scene = &levelMenu;
 }
 
 void loop() {
