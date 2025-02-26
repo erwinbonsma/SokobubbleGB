@@ -10,7 +10,6 @@ public:
   // This can be the current one, a new one, or none.
   virtual Animation* update() = 0;
 
-  virtual bool implementsDraw() { return false; }
   virtual void draw() {}
 };
 
@@ -44,28 +43,41 @@ public:
 
   void setRightToLeft() { _leftToRight = false; }
   void setCenterLevel() { _centerLevel = true; }
+  void showFromName() { _yOffsetName = 0; }
 
   int offsetLeft() const { return addCentering(-addDirection(_offset)); }
   int offsetRight() const { return addCentering(80 - addDirection(_offset)); }
 
   Animation* update() override;
-
-  bool implementsDraw() override { return true; }
   void draw() override;
 };
 
-class LevelStartAnimation : public Animation {
-  LevelSlideAnimation* _slideAnim;
+// Animates transition to next level.
+//
+// It is a thin wrapper around LevelSlideAnimation to transition into
+// StartLevelAnimation
+class NextLevelAnimation : public Animation {
+  int _step;
+
+public:
+  void init();
+
+  Animation* update() override;
+  void draw() override;
+};
+
+// Start a level. Animates removal of name
+class StartLevelAnimation : public Animation {
   int _yOffsetName;
 
 public:
   void init();
 
-  bool implementsDraw() override { return true; }
   Animation* update() override;
   void draw() override;
 };
 
 extern LevelDoneAnimation levelDoneAnim;
-extern LevelStartAnimation levelStartAnim;
+extern NextLevelAnimation nextLevelAnim;
+extern StartLevelAnimation startLevelAnim;
 extern LevelSlideAnimation levelSlideAnim;

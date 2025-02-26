@@ -1,13 +1,25 @@
 #include "LevelMenu.h"
 
 #include "Game.h"
+#include "SoundFx.h"
 
 void LevelMenu::init() {
   _xOffset = 8;
 }
 
+void LevelMenu::startSlideTransition() {
+  levelSlideAnim.setCenterLevel();
+  levelSlideAnim.showFromName();
+
+  _slideAnim = &levelSlideAnim;
+
+  gb.sound.fx(pushStartSfx);
+}
+
 Scene* LevelMenu::update() {
   if (_xOffset == 0) {
+    startLevelAnim.init();
+    game.setAnimation(&startLevelAnim);
     return &game;
   } else if (_xOffset != 8) {
     _xOffset--;
@@ -17,15 +29,15 @@ Scene* LevelMenu::update() {
     Level* oldLevel = &game.level();
     game.initLevel((oldLevel->levelIndex() + numLevels - 1) % numLevels);
     levelSlideAnim.init(&game.level(), oldLevel);
-    levelSlideAnim.setCenterLevel();
     levelSlideAnim.setRightToLeft();
-    _slideAnim = &levelSlideAnim;
+
+    startSlideTransition();
   } else if (gb.buttons.pressed(BUTTON_RIGHT)) {
     Level* oldLevel = &game.level();
     game.initLevel((oldLevel->levelIndex() + 1) % numLevels);
     levelSlideAnim.init(oldLevel, &game.level());
-    levelSlideAnim.setCenterLevel();
-    _slideAnim = &levelSlideAnim;
+
+    startSlideTransition();
   } else if (gb.buttons.pressed(BUTTON_A)) {
     _xOffset--;
   }

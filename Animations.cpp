@@ -7,7 +7,8 @@
 #include "SoundFx.h"
 
 LevelDoneAnimation levelDoneAnim;
-LevelStartAnimation levelStartAnim;
+NextLevelAnimation nextLevelAnim;
+StartLevelAnimation startLevelAnim;
 LevelSlideAnimation levelSlideAnim;
 
 int ease(int x, int range) {
@@ -59,8 +60,8 @@ Animation* LevelDoneAnimation::update() {
   if (done) {
     _lights->changeColor(ObjectColor::None);
 
-    levelStartAnim.init();
-    return &levelStartAnim;
+    nextLevelAnim.init();
+    return &nextLevelAnim;
   }
 
   _lights->update();
@@ -68,20 +69,44 @@ Animation* LevelDoneAnimation::update() {
   return this;
 }
 
-void LevelStartAnimation::init() {
+void NextLevelAnimation::init() {
   Level* oldLevel = &game.level();
   game.initNextLevel();
   levelSlideAnim.init(oldLevel, &game.level());
-  _slideAnim = &levelSlideAnim;
+  _step = 0;
+}
+
+Animation* NextLevelAnimation::update() {
+  if (_step == 0) {
+    if (levelSlideAnim.update()) {
+      return this;
+    }
+  }
+
+  _step++;
+
+  if (_step == 30) {
+    startLevelAnim.init();
+    return &startLevelAnim;
+  }
+
+  return this;
+}
+
+void NextLevelAnimation::draw() {
+  if (_step == 0) {
+    levelSlideAnim.draw();
+  } else {
+    game.level().draw();
+    game.level().drawName();
+  }
+}
+
+void StartLevelAnimation::init() {
   _yOffsetName = 0;
 }
 
-Animation* LevelStartAnimation::update() {
-  if (_slideAnim) {
-    _slideAnim = static_cast<LevelSlideAnimation *>(_slideAnim->update());
-    return this;
-  }
-
+Animation* StartLevelAnimation::update() {
   _yOffsetName--;
   if (_yOffsetName == -9) {
     gb.sound.fx(getReadySfx);
@@ -91,16 +116,9 @@ Animation* LevelStartAnimation::update() {
   return this;
 }
 
-void LevelStartAnimation::draw() {
-  int offset = 0;
-  if (_slideAnim) {
-    _slideAnim->draw();
-    offset = _slideAnim->offsetRight();
-  } else {
-    game.level().draw();
-  }
-
-  game.level().drawName(offset, _yOffsetName);
+void StartLevelAnimation::draw() {
+  game.level().draw();
+  game.level().drawName(0, _yOffsetName);
 }
 
 void LevelSlideAnimation::init(Level* levelL, Level* levelR) {
@@ -113,11 +131,12 @@ void LevelSlideAnimation::init(Level* levelL, Level* levelR) {
 
   _step = 0;
   _offset = 0;
+  _yOffsetName = -99;
 }
 
 Animation* LevelSlideAnimation::update() {
-  if (_step < 10) {
-    _yOffsetName = -_step;
+  if (_step < 10 && _yOffsetName != -99) {
+    _yOffsetName--;
   } else if (_step > 30) {
     _yOffsetName = _step - 40;
   } else {

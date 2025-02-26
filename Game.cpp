@@ -596,7 +596,7 @@ Scene* Game::update() {
 }
 
 void Game::draw() {
-  if (_animation && _animation->implementsDraw()) {
+  if (_animation) {
     _animation->draw();
   } else {
     level().draw();
