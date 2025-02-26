@@ -21,6 +21,7 @@ public:
   void init(Lights* lights);
 
   Animation* update() override;
+  void draw() override;
 };
 
 class LevelSlideAnimation : public Animation {

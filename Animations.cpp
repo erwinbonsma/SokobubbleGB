@@ -71,6 +71,11 @@ Animation* LevelDoneAnimation::update() {
   return this;
 }
 
+void LevelDoneAnimation::draw() {
+  game.level().draw();
+  game.level().drawInfoPanelText();
+}
+
 void NextLevelAnimation::init() {
   Level* oldLevel = &game.level();
   game.initNextLevel();
