@@ -8,7 +8,11 @@
 void LevelMenu::init() {
   _xOffset = 8;
   _slideAnim = nullptr;
+#ifdef DEVELOPMENT
+  _numSelectable = numLevels;
+#else
   _numSelectable = progressTracker.getMaxLevelIndex() + 1;
+#endif
 }
 
 void LevelMenu::startSlideTransition() {
