@@ -359,6 +359,48 @@ const ObjectSpec bubblesRGB[] = {
   ObjectSpec { .pos = GridPos(1, 5), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesSpares[] = {
+  0x02, 0x17, 0x17, 0x17, 0x17, 0x17, 0x03,
+  0x16,   -1,    0,   -1,    0,   -1, 0x06,
+  0x16,    0,   -1,    0,   -1,    0, 0x06,
+  0x16,   -1,    0,    0,    0,   -1, 0x06,
+  0x16,    0,   -1,    0,   -1,    0, 0x06,
+  0x16,   -1,    0,   -1,    0,   -1, 0x06,
+  0x04, 0x07, 0x07, 0x07, 0x07, 0x07, 0x05,
+};
+const ObjectSpec boxesSpares[] = {
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsSpares[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(5, 1), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(1, 5), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Any },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Any },
+};
+const ObjectSpec bubblesSpares[] = {
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 5), .color = ObjectColor::Blue },
+};
+
 const int8_t tilesFoursome[] = {
   0x02, 0x17, 0x17, 0x17, 0x17, 0x17, 0x03,
   0x16,    0,    0,    0,    0,    0, 0x06,
@@ -531,6 +573,18 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesRGB,
     .targets = targetsRGB,
     .bubbles = bubblesRGB,
+  },
+  LevelSpec {
+    .name = "Spares",
+    .grid = GridSpec { .w = 7, .h = 7, .tiles = tilesSpares },
+    .player = ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::None },
+    .saveSlot = 13,
+    .numBoxes = 8,
+    .numTargets = 12,
+    .numBubbles = 6,
+    .boxes = boxesSpares,
+    .targets = targetsSpares,
+    .bubbles = bubblesSpares,
   },
   LevelSpec {
     .name = "Foursome",
