@@ -4,6 +4,7 @@
 
 #include "LevelMenu.h"
 #include "Music.h"
+#include "PopupMenu.h"
 #include "ProgressTracker.h"
 #include "Utils.h"
 
@@ -28,6 +29,9 @@ void update() {
 
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();
+  }
+  if (gb.buttons.pressed(BUTTON_MENU)) {
+    popupMenu.toggleVisibility();
   }
 }
 
