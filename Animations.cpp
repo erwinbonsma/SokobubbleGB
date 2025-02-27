@@ -163,7 +163,7 @@ void LevelSlideAnimation::draw() {
   if (_centerLevel) {
     // Ensure background left of left level is cleared
     gb.display.setColor(BLACK);
-    fillFastVRect(offsetLeft() - 8, 8);
+    gb.display.fillRect(offsetLeft() - 8, 0, 8, 64);
   }
 
   if (_yOffsetName != -99) {
@@ -215,7 +215,7 @@ Animation* RetryAnimation::update() {
 
 void RetryAnimation::draw() {
   gb.display.setColor(BLACK);
-  fillFastVRect(0, _xOffset);
+  gb.display.fillRect(0, 0, _xOffset, 64);
 
   game.level().draw(_xOffset);
 }

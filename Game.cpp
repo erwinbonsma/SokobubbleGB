@@ -571,7 +571,7 @@ void Level::draw(int xOffset) {
 
   // Clear info panel background
   gb.display.setColor(BLACK);
-  fillFastVRect(64 + xOffset, 16);
+  gb.display.fillRect(64 + xOffset, 0, 16, 64);
 
   int bubbleOffset = ((gb.frameCount / 30) % 2) * 4 - 1;
   for (int i = 0; i < _spec->numBubbles; ++i) {

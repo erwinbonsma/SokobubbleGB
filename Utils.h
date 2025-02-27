@@ -14,8 +14,6 @@ public:
 
 extern Scene* scene;
 
-void fillFastVRect(int x0, int w);
-
 void assertFailed(const char *function, const char *file, int lineNo, const char *expression);
 
 #define assertTrue(condition) \

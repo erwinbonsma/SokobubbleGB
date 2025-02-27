@@ -61,7 +61,7 @@ void LevelMenu::draw() {
     _slideAnim->draw();
   } else {
     gb.display.setColor(BLACK);
-    fillFastVRect(0, _xOffset);
+    gb.display.fillRect(0, 0, _xOffset, 64);
 
     game.level().draw(_xOffset);
     game.level().drawName(_xOffset);
