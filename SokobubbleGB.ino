@@ -8,30 +8,24 @@
 #include "ProgressTracker.h"
 #include "Utils.h"
 
-bool musicOn = false;
 Scene* scene;
-
-void toggleMusic() {
-  musicOn = !musicOn;
-  if (musicOn) {
-    gb.sound.playSong(song, true);
-  } else {
-    gb.sound.stopSong();
-  }
-}
 
 void draw() {
   scene->draw();
 }
 
 void update() {
+  if (gb.buttons.pressed(BUTTON_MENU)) {
+    if (!popupMenu.isVisible()) {
+      popupMenu.show();
+      return;
+    }
+  }
+
   scene->update();
 
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();
-  }
-  if (gb.buttons.pressed(BUTTON_MENU)) {
-    popupMenu.toggleVisibility();
   }
 }
 

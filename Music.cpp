@@ -1,5 +1,16 @@
 #include "Music.h"
 
+bool musicOn = false;
+
+void toggleMusic() {
+  musicOn = !musicOn;
+  if (musicOn) {
+    gb.sound.playSong(song, true);
+  } else {
+    gb.sound.stopSong();
+  }
+}
+
 namespace Gamebuino_Meta {
 
 const NoteSpec sfx10Notes[32] = {

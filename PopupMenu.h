@@ -5,8 +5,16 @@
 class PopupMenu : Scene {
   Scene* _mainScene;
   int _selectedItem;
+  bool _showSubView;
+
+  void drawHelp();
+  void drawStats();
+  void drawCredits();
+
+  void drawPopup();
 
 public:
+  bool isVisible();
   void toggleVisibility();
   void show();
   void hide();
