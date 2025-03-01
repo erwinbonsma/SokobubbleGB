@@ -721,6 +721,44 @@ const ObjectSpec bubblesWhirly[] = {
   ObjectSpec { .pos = GridPos(5, 6), .color = ObjectColor::Red },
 };
 
+const int8_t tiles3x3[] = {
+  0x02, 0x09, 0x0b, 0x17, 0x17, 0x09, 0x0b, 0x03,
+  0x0a,   -1,   -1,    0,    0,   -1,   -1, 0x3a,
+  0x08,   -1,    0,    0,    0,    0,   -1, 0x28,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x0a,    0,    0,   -1,    0,    0,    0, 0x3a,
+  0x08,    0,    0,   -1,   -1,    0,    0, 0x28,
+  0x04, 0x29, 0x2b, 0x07, 0x07, 0x29, 0x2b, 0x05,
+};
+const ObjectSpec boxes3x3[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Red },
+};
+const ObjectSpec targets3x3[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(3, 6), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Green },
+};
+const ObjectSpec bubbles3x3[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 6), .color = ObjectColor::Green },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -997,5 +1035,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesWhirly,
     .targets = targetsWhirly,
     .bubbles = bubblesWhirly,
+  },
+  LevelSpec {
+    .name = "3x3",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tiles3x3 },
+    .player = ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::None },
+    .saveSlot = 24,
+    .numBoxes = 9,
+    .numTargets = 9,
+    .numBubbles = 3,
+    .boxes = boxes3x3,
+    .targets = targets3x3,
+    .bubbles = bubbles3x3,
   },
 };

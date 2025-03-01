@@ -33,5 +33,5 @@ struct LevelSpec {
 };
 
 constexpr int maxBoxes = 13;
-constexpr int numLevels = 23;
+constexpr int numLevels = 24;
 extern const LevelSpec levels[numLevels];
