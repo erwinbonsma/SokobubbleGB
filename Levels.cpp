@@ -759,6 +759,22 @@ const ObjectSpec bubbles3x3[] = {
   ObjectSpec { .pos = GridPos(3, 6), .color = ObjectColor::Green },
 };
 
+const int8_t tilesTheEnd[] = {
+  0x1b, 0x3c, 0x40, 0x38, 0x38, 0x02, 0x39,
+   -99, 0x16,    0, 0x0f, 0x2d, 0x0f, 0x39,
+   -99, 0x30,    0, 0x0a, 0x0a, 0x24, 0x39,
+  0x02, 0x09, 0x22, 0x26, 0x22, 0x26, 0x28,
+  0x0f, 0x09, 0x16, 0x16, 0x16, 0x16, 0x1a,
+  0x04, 0x29, 0x2a, 0x2a, 0x04, 0x37,  -99,
+};
+const ObjectSpec boxesTheEnd[] = {
+  ObjectSpec { .pos = GridPos(6, 5), .color = ObjectColor::Yellow },
+};
+const ObjectSpec targetsTheEnd[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Yellow },
+};
+const ObjectSpec bubblesTheEnd[] = {};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -1047,5 +1063,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxes3x3,
     .targets = targets3x3,
     .bubbles = bubbles3x3,
+  },
+  LevelSpec {
+    .name = "The end",
+    .grid = GridSpec { .w = 7, .h = 6, .tiles = tilesTheEnd },
+    .player = ObjectSpec { .pos = GridPos(2, 1), .color = ObjectColor::Yellow },
+    .saveSlot = 25,
+    .numBoxes = 1,
+    .numTargets = 1,
+    .numBubbles = 0,
+    .boxes = boxesTheEnd,
+    .targets = targetsTheEnd,
+    .bubbles = bubblesTheEnd,
   },
 };
