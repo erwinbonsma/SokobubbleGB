@@ -548,6 +548,35 @@ const ObjectSpec bubblesCenter[] = {
   ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Red },
 };
 
+const int8_t tilesSquares[] = {
+  0x28, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x29,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,   -1,   -1, 0x06,
+  0x16,    0,    0,    0,    0,   -1,   -1, 0x06,
+  0x2a, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x2b,
+};
+const ObjectSpec boxesSquares[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Yellow },
+};
+const ObjectSpec targetsSquares[] = {
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(6, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 6), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(6, 6), .color = ObjectColor::Blue },
+};
+const ObjectSpec bubblesSquares[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Green },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -764,5 +793,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesCenter,
     .targets = targetsCenter,
     .bubbles = bubblesCenter,
+  },
+  LevelSpec {
+    .name = "Squares",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesSquares },
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
+    .saveSlot = 19,
+    .numBoxes = 4,
+    .numTargets = 4,
+    .numBubbles = 4,
+    .boxes = boxesSquares,
+    .targets = targetsSquares,
+    .bubbles = bubblesSquares,
   },
 };
