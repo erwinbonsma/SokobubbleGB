@@ -6,6 +6,8 @@
 #undef max
 #include <algorithm>
 
+#include "Utils.h"
+
 constexpr uint8_t VMAJOR = 0;
 constexpr uint8_t VMINOR = 1;
 
@@ -37,6 +39,13 @@ void ProgressTracker::init() {
   while (isLevelSolved(_maxLevelIndex)) {
     _maxLevelIndex++;
   }
+
+#ifdef DEVELOPMENT
+  for (int i = 0; i < 6; ++i) {
+    _minMoves[i] = 30 + i * 10;
+    _totalMoves += _minMoves[i];
+  }
+#endif
 
   gb.save.set(SAVEINDEX_VMAJOR, static_cast<int32_t>(VMAJOR));
   gb.save.set(SAVEINDEX_VMINOR, static_cast<int32_t>(VMINOR));

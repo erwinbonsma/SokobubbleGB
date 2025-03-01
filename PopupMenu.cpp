@@ -1,7 +1,9 @@
 #include "PopupMenu.h"
 
 #include "Images.h"
+#include "Levels.h"
 #include "Music.h"
+#include "ProgressTracker.h"
 
 constexpr int numMenuOptions = 4;
 const char* menuOptions[numMenuOptions] = {
@@ -72,17 +74,41 @@ void PopupMenu::drawCredits() {
 }
 
 void PopupMenu::drawStats() {
-  gb.display.clear(DARKBLUE);
+  gb.display.clear(BLUE);
+
+  gb.display.setColor(DARKBLUE);
+  gb.display.fillRect(1, 1, 78, 9);
+  gb.display.fillRect(24, 11, 28, 52);
 
   gb.display.setColor(BLUE);
-  gb.display.setCursor(30, 2);
-  gb.display.print("Stats");
+  gb.display.setCursor(3, 3);
+  gb.display.print("MOVES");
+
+  gb.display.setColor(YELLOW);
+  gb.display.setCursor(32, 3);
+  gb.display.printf("Total=%5d", progressTracker.getTotalMoves());
+
+  gb.display.setColor(WHITE);
+  for (int i = 0; i < numLevels; ++i) {
+    int moves = progressTracker.getLevelMinMoves(i);
+
+    gb.display.setCursor(-2 + 28 * (i / 8), 14 + 6 * (i % 8));
+    gb.display.setColor((i / 8) % 2 ? BLUE : DARKBLUE);
+    gb.display.printf("%2d.", i + 1);
+
+    gb.display.setColor(WHITE);
+    if (moves) {
+      gb.display.printf("%3d", moves);
+    } else {
+      gb.display.print("  -");
+    }
+  }
 }
 
 void PopupMenu::drawHelp() {
   gb.display.clear(DARKGRAY);
 
-  playerImage.setFrame(0);
+  playerImage.setFrame(5);
   for (int row = 0; row < 6; ++row) {
     int y = row * 8 + 3;
     for (int col = 0; col < 2; ++col) {
