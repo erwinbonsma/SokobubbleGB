@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "Images.h"
 #include "LevelMenu.h"
 #include "Music.h"
 #include "PopupMenu.h"
@@ -32,6 +33,8 @@ void update() {
 void setup() {
   gb.begin();
   gb.setFrameRate(30);
+
+  gb.display.setPalette(customPalette);
 
   progressTracker.init();
   progressTracker.dump();

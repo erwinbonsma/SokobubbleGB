@@ -10,6 +10,8 @@ constexpr int helpIconPass = 0;
 constexpr int helpIconFail = 1;
 constexpr int helpIconArrow = 2;
 
+extern const Color customPalette[];
+
 extern Image playerImage;
 extern Image cockpitImage;
 extern Image wallsImage;
