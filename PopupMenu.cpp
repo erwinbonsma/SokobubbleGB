@@ -55,9 +55,17 @@ void PopupMenu::hide() {
   _mainScene = nullptr;
 }
 
+void PopupMenu::showStats() {
+  if (!isVisible()) {
+    show();
+  }
+  _showSubView = true;
+  _selectedItem = PopupMenuItem::Stats;
+}
+
 void PopupMenu::update() {
   if (gb.buttons.pressed(BUTTON_A)) {
-    if (_selectedItem == 2) {
+    if (_selectedItem == PopupMenuItem::Music) {
       toggleMusic();
     } else if (_showSubView) {
       _showSubView = false;
@@ -73,14 +81,18 @@ void PopupMenu::update() {
       hide();
     }
   } else if (gb.buttons.pressed(BUTTON_UP)) {
-    _selectedItem = (_selectedItem + numMenuOptions - 1) % numMenuOptions;
+    _selectedItem = static_cast<PopupMenuItem>(
+      (static_cast<int>(_selectedItem) + numMenuOptions - 1) % numMenuOptions
+    );
   } else if (gb.buttons.pressed(BUTTON_DOWN)) {
-    _selectedItem = (_selectedItem + 1) % numMenuOptions;
+    _selectedItem = static_cast<PopupMenuItem>(
+      (static_cast<int>(_selectedItem) + 1) % numMenuOptions
+    );
   }
 
   if (_showSubView) {
     _step++;
-    if (_step == 450 && _selectedItem == 3) {
+    if (_step == 450 && _selectedItem == PopupMenuItem::Credits) {
       _showSubView = false;
       hide();
     }
@@ -149,7 +161,7 @@ void PopupMenu::drawStats() {
   gb.display.printf("%5d", progressTracker.getTotalMoves());
 
   gb.display.setColor(WHITE);
-  for (int i = 0; i < numLevels; ++i) {
+  for (int i = 0; i < 24; ++i) {
     int moves = progressTracker.getLevelMinMoves(i);
 
     gb.display.setCursor(-2 + 28 * (i / 8), 10 + 6 * (i % 8));
@@ -227,7 +239,7 @@ void PopupMenu::drawPopup() {
   gb.display.drawRect(12, 16, 56, 31);
 
   for (int i = 0; i < numMenuOptions; ++i) {
-    gb.display.setColor((i == _selectedItem) ? BLUE : BLACK);
+    gb.display.setColor((i == static_cast<int>(_selectedItem)) ? BLUE : BLACK);
 
     gb.display.setCursor(16, 20 + 6 * i);
     gb.display.print(menuOptions[i]);
@@ -241,11 +253,11 @@ void PopupMenu::drawPopup() {
 
 void PopupMenu::draw() {
   if (_showSubView) {
-    if (_selectedItem == 0) {
+    if (_selectedItem == PopupMenuItem::Help) {
       drawHelp();
-    } else if (_selectedItem == 1) {
+    } else if (_selectedItem == PopupMenuItem::Stats) {
       drawStats();
-    } else {
+    } else if (_selectedItem == PopupMenuItem::Credits) {
       drawCredits();
     }
   } else {

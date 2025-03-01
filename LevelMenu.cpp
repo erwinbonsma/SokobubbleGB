@@ -2,6 +2,7 @@
 
 #include "Images.h"
 #include "Game.h"
+#include "PopupMenu.h"
 #include "ProgressTracker.h"
 #include "SoundFx.h"
 
@@ -51,8 +52,13 @@ void LevelMenu::update() {
 
     startSlideTransition();
   } else if (gb.buttons.pressed(BUTTON_A)) {
-    // Move level to ensure smooth level start transition
-    _xOffset--;
+    if (game.level().levelIndex() < numLevels - 1) {
+      // Move level to ensure smooth level start transition
+      _xOffset--;
+    } else {
+      // From level 'The end' go to stats
+      popupMenu.showStats();
+    }
   }
 }
 
