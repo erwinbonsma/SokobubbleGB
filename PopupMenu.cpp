@@ -77,22 +77,22 @@ void PopupMenu::drawStats() {
   gb.display.clear(BLUE);
 
   gb.display.setColor(DARKBLUE);
-  gb.display.fillRect(1, 1, 78, 9);
-  gb.display.fillRect(24, 11, 28, 52);
+  gb.display.fillRect(1, 1, 78, 7);
+  gb.display.fillRect(24, 9, 28, 49);
 
-  gb.display.setColor(BLUE);
-  gb.display.setCursor(3, 3);
+  gb.display.setColor(LIGHTBLUE);
+  gb.display.setCursor(30, 2);
   gb.display.print("MOVES");
 
   gb.display.setColor(YELLOW);
-  gb.display.setCursor(32, 3);
-  gb.display.printf("Total=%5d", progressTracker.getTotalMoves());
+  gb.display.setCursor(58, 58);
+  gb.display.printf("%5d", progressTracker.getTotalMoves());
 
   gb.display.setColor(WHITE);
   for (int i = 0; i < numLevels; ++i) {
     int moves = progressTracker.getLevelMinMoves(i);
 
-    gb.display.setCursor(-2 + 28 * (i / 8), 14 + 6 * (i % 8));
+    gb.display.setCursor(-2 + 28 * (i / 8), 10 + 6 * (i % 8));
     gb.display.setColor((i / 8) % 2 ? BLUE : DARKBLUE);
     gb.display.printf("%2d.", i + 1);
 
