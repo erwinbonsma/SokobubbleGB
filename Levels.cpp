@@ -610,6 +610,43 @@ const ObjectSpec bubblesReverse[] = {
   ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesCross[] = {
+  0x02, 0x17, 0x09, 0x0b, 0x09, 0x0b, 0x17, 0x03,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x0a,    0,    0,    0,    0,    0,    0, 0x1a,
+  0x08,   -1,    0,    0,    0,    0,   -1, 0x18,
+  0x0a,   -1,    0,    0,    0,    0,   -1, 0x1a,
+  0x08,    0,    0,    0,    0,    0,    0, 0x18,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x04, 0x07, 0x19, 0x1b, 0x19, 0x1b, 0x07, 0x05,
+};
+const ObjectSpec boxesCross[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Yellow },
+};
+const ObjectSpec targetsCross[] = {
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(4, 1), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(1, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(6, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(6, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 6), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Blue },
+};
+const ObjectSpec bubblesCross[] = {
+  ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(6, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(1, 6), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(6, 6), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -850,5 +887,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesReverse,
     .targets = targetsReverse,
     .bubbles = bubblesReverse,
+  },
+  LevelSpec {
+    .name = "Cross",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesCross },
+    .player = ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::None },
+    .saveSlot = 21,
+    .numBoxes = 8,
+    .numTargets = 8,
+    .numBubbles = 4,
+    .boxes = boxesCross,
+    .targets = targetsCross,
+    .bubbles = bubblesCross,
   },
 };
