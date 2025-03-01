@@ -45,6 +45,7 @@ void ProgressTracker::init() {
     _minMoves[i] = 30 + i * 10;
     _totalMoves += _minMoves[i];
   }
+  _maxLevelIndex = numLevels - 1;
 #endif
 
   gb.save.set(SAVEINDEX_VMAJOR, static_cast<int32_t>(VMAJOR));

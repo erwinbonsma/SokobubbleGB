@@ -461,6 +461,36 @@ const ObjectSpec bubblesFoursome[] = {
   ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Yellow },
 };
 
+const int8_t tilesSkull[] = {
+  0x02, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x03,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x2a, 0x13,   -1,   -1,   -1,   -1, 0x12, 0x2b,
+   -99, 0x16,    0,    0,    0,    0, 0x06,  -99,
+   -99, 0x04, 0x07, 0x07, 0x07, 0x07, 0x05,  -99,
+};
+const ObjectSpec boxesSkull[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsSkull[] = {
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Green },
+};
+const ObjectSpec bubblesSkull[] = {
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(3, 6), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Green },
+};
+
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -641,5 +671,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesFoursome,
     .targets = targetsFoursome,
     .bubbles = bubblesFoursome,
+  },
+  LevelSpec {
+    .name = "Skull",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesSkull },
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
+    .saveSlot = 16,
+    .numBoxes = 4,
+    .numTargets = 4,
+    .numBubbles = 4,
+    .boxes = boxesSkull,
+    .targets = targetsSkull,
+    .bubbles = bubblesSkull,
   },
 };
