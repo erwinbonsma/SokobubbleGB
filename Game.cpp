@@ -508,11 +508,13 @@ void Level::drawInfoPanelText() {
   }
 
   int cpuLoad = gb.getCpuLoad();
+  maxCpuLoad = std::max(cpuLoad, maxCpuLoad);
+#ifdef DEVELOPMENT
   gb.display.setCursor(x0, 50);
   gb.display.printf("%3d", cpuLoad);
-  maxCpuLoad = std::max(cpuLoad, maxCpuLoad);
   gb.display.setCursor(x0, 56);
   gb.display.printf("%3d", maxCpuLoad);
+#endif
 
   gb.display.setColor(DARKGRAY);
   gb.display.setCursor(x0, 2);
@@ -524,8 +526,10 @@ void Level::drawInfoPanelText() {
   gb.display.setCursor(x0, 30);
   gb.display.print("Min");
 
+#ifdef DEVELOPMENT
   gb.display.setCursor(x0, 44);
   gb.display.print("Cpu");
+#endif
 }
 
 void Level::drawFixed(Gamebuino_Meta::Graphics& g) {
