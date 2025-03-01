@@ -647,6 +647,43 @@ const ObjectSpec bubblesCross[] = {
   ObjectSpec { .pos = GridPos(6, 6), .color = ObjectColor::Blue },
 };
 
+const int8_t tilesWindmill[] = {
+  0x08, 0x0b, 0x17, 0x17, 0x17, 0x17, 0x17, 0x19,
+  0x16,    0,    0,   -1,    0,   -1,    0, 0x18,
+  0x16,   -1,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,   -1, 0x06,
+  0x16,   -1,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,   -1, 0x06,
+  0x0a,    0,   -1,    0,   -1,    0,    0, 0x06,
+  0x1b, 0x07, 0x07, 0x07, 0x07, 0x07, 0x19, 0x1a,
+};
+const ObjectSpec boxesWindmill[] = {
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Green },
+};
+const ObjectSpec targetsWindmill[] = {
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 1), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(1, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(6, 3), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(1, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(6, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(2, 6), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Red },
+};
+const ObjectSpec bubblesWindmill[] = {
+  ObjectSpec { .pos = GridPos(3, 1), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(6, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(1, 4), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Green },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -899,5 +936,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesCross,
     .targets = targetsCross,
     .bubbles = bubblesCross,
+  },
+  LevelSpec {
+    .name = "Windmill",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesWindmill },
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
+    .saveSlot = 22,
+    .numBoxes = 8,
+    .numTargets = 8,
+    .numBubbles = 4,
+    .boxes = boxesWindmill,
+    .targets = targetsWindmill,
+    .bubbles = bubblesWindmill,
   },
 };
