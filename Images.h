@@ -18,3 +18,9 @@ extern Image targetImage;
 extern Image bubbleImage;
 extern Image iconsImage;
 extern Image helpIconsImage;
+
+extern Image LogoB_Image;
+extern Image LogoE_Image;
+extern Image LogoL_Image;
+extern Image LogoU_Image;
+extern Image LogoSOKO_Image;

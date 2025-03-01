@@ -1,9 +1,14 @@
 #include "PopupMenu.h"
 
+#undef min
+#undef max
+#include <algorithm>
+
 #include "Images.h"
 #include "Levels.h"
 #include "Music.h"
 #include "ProgressTracker.h"
+#include "SoundFx.h"
 
 constexpr int numMenuOptions = 4;
 const char* menuOptions[numMenuOptions] = {
@@ -13,6 +18,20 @@ const char* menuOptions[numMenuOptions] = {
   "Credits",
 };
 const char* musicState[2] = { "off", "on" };
+constexpr int numCreditsText = 11;
+const char* creditsText[numCreditsText] {
+  "(c)2025",
+  "",
+  "Concept",
+  "Coding",
+  "Level design",
+  "Graphics",
+  "Sound effects",
+  "by Erwin Bonsma",
+  "",
+  "Music",
+  "by Paul Bonsma",
+};
 
 bool PopupMenu::isVisible() {
   return scene == this;
@@ -45,6 +64,7 @@ void PopupMenu::update() {
       hide();
     } else {
       _showSubView = true;
+      _step = 0;
     }
   } else if (gb.buttons.pressed(BUTTON_MENU)) {
     if (_showSubView) {
@@ -57,20 +77,60 @@ void PopupMenu::update() {
   } else if (gb.buttons.pressed(BUTTON_DOWN)) {
     _selectedItem = (_selectedItem + 1) % numMenuOptions;
   }
+
+  if (_showSubView) {
+    _step++;
+    if (_step == 450 && _selectedItem == 3) {
+      _showSubView = false;
+      hide();
+    }
+  }
+}
+
+int bump(int t, int t_peak) {
+  return std::max(0, 2 - abs(t - t_peak));
 }
 
 void PopupMenu::drawCredits() {
-  gb.display.clear(DARKBLUE);
+  gb.display.clear(BLACK);
 
-  gb.display.setColor(BLUE);
-  gb.display.setCursor(26, 2);
-  gb.display.print("Credits");
+  int scroll = std::max(0, _step / 3 - 12);
 
-  // gb.display.setColor(BLACK);
-  // for (int i = 0; i < numHelpText; ++i) {
-  //   gb.display.setCursor(2, 2 + i * 6);
-  //   gb.display.print(helpText[i]);
-  // }
+  if (scroll < 40) {
+    gb.display.drawImage(8, 16 - scroll, LogoSOKO_Image);
+  }
+  if (scroll < 51) {
+    int x = 16 + 38;
+    int y = 36 - scroll;
+
+    gb.display.drawImage(x, y - bump(_step, 32) + 4, LogoE_Image);
+    x -= 6;
+    gb.display.drawImage(x, y - bump(_step, 28), LogoL_Image);
+    x -= 8;
+    gb.display.drawImage(x, y - bump(_step, 24), LogoB_Image);
+    x -= 8;
+    gb.display.drawImage(x, y - bump(_step, 20), LogoB_Image);
+    x -= 8;
+    gb.display.drawImage(x, y - bump(_step, 16) + 4, LogoU_Image);
+    x -= 8;
+    gb.display.drawImage(x, y - bump(_step, 12), LogoB_Image);
+  }
+
+  for (int i = 0; i < numCreditsText; ++i) {
+    int y = 64 - scroll + i * 6;
+    if (y < -4 || y >= 64) continue;
+
+    const char* s = creditsText[i];
+    gb.display.setCursor(40 - strlen(s) * 2, y);
+    gb.display.setColor(BLUE);
+    if (strncmp(s, "by", 2) == 0) {
+      gb.display.print("by ");
+      gb.display.setColor(LIGHTBLUE);
+      gb.display.print(&s[3]);
+    } else {
+      gb.display.print(s);
+    }
+  }
 }
 
 void PopupMenu::drawStats() {
