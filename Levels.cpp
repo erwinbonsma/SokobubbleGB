@@ -577,6 +577,39 @@ const ObjectSpec bubblesSquares[] = {
   ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Green },
 };
 
+const int8_t tilesReverse[] = {
+  0x02, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x03,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,   -1,   -1,   -1,   -1,    0, 0x06,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x04, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x05,
+};
+const ObjectSpec boxesReverse[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(3, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsReverse[] = {
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 5), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 5), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Yellow },
+};
+const ObjectSpec bubblesReverse[] = {
+  ObjectSpec { .pos = GridPos(2, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(5, 3), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Blue },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -805,5 +838,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesSquares,
     .targets = targetsSquares,
     .bubbles = bubblesSquares,
+  },
+  LevelSpec {
+    .name = "Reverse",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesReverse },
+    .player = ObjectSpec { .pos = GridPos(1, 1), .color = ObjectColor::None },
+    .saveSlot = 20,
+    .numBoxes = 4,
+    .numTargets = 4,
+    .numBubbles = 8,
+    .boxes = boxesReverse,
+    .targets = targetsReverse,
+    .bubbles = bubblesReverse,
   },
 };
