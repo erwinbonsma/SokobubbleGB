@@ -41,10 +41,12 @@ void ProgressTracker::init() {
   }
 
 #ifdef DEVELOPMENT
+#ifdef TARGET_WASM_EMULATOR
   for (int i = 0; i < 6; ++i) {
     _minMoves[i] = 30 + i * 10;
     _totalMoves += _minMoves[i];
   }
+#endif
   _maxLevelIndex = numLevels - 1;
 #endif
 
