@@ -172,8 +172,19 @@ void PopupMenu::drawHelp() {
   for (int row = 0; row < 6; ++row) {
     int y = row * 8 + 3;
     for (int col = 0; col < 2; ++col) {
-      int x = col * 40;
-      gb.display.drawImage(x + 8, y, playerImage);
+      int x = col * 40 - 4;
+      if (row < 3) {
+        gb.display.drawImage(x + 8, y, playerImage);
+
+        if (row != 0) {
+          cockpitImage.setFrame(1 + (((row == 2) + col) % 2) * 2);
+          gb.display.drawImage(x + 11, y + 3, cockpitImage);
+        }
+      } else {
+        int idx = (col == 0 ? row * 4 : row * 2 + 2) % 6;
+        targetImage.setFrame(idx);
+        gb.display.drawImage(x + 16, y, targetImage);
+      }
       if (row == 0) {
         bubbleImage.setFrame(col * 2);
         gb.display.drawImage(x + 18, y + 2, bubbleImage);
@@ -187,18 +198,10 @@ void PopupMenu::drawHelp() {
         gb.display.drawImage(x + 34, y + 3, cockpitImage);
       } else {
         helpIconsImage.setFrame(row % 3 / 2);
-        gb.display.drawImage(x + 2, y + 1, helpIconsImage);
-
-        cockpitImage.setFrame(1 + (((row == 2) + col) % 2) * 2);
-        gb.display.drawImage(x + 11, y + 3, cockpitImage);
+        gb.display.drawImage(x + 25, y + 1, helpIconsImage);
 
         boxImage.setFrame(col * 4);
         gb.display.drawImage(x + 17, y + 1, boxImage);
-      }
-      if (row >= 3) {
-        int idx = (col == 0 ? row * 4 : row * 2 + 2) % 6;
-        targetImage.setFrame(idx);
-        gb.display.drawImage(x + 24, y, targetImage);
       }
     }
   }
