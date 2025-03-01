@@ -519,6 +519,35 @@ const ObjectSpec bubblesSpiral[] = {
   ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Yellow },
 };
 
+const int8_t tilesCenter[] = {
+   -99, 0x02, 0x17, 0x17, 0x17, 0x17, 0x03,  -99,
+  0x02, 0x15,    0,    0,    0,    0, 0x14, 0x03,
+  0x16,    0,    0,    0,    0,    0,    0, 0x06,
+  0x16,    0,    0,   -1,   -1,    0,    0, 0x06,
+  0x04, 0x13,    0,   -1,   -1,    0,    0, 0x06,
+   -99, 0x16,    0,    0,    0,    0,    0, 0x06,
+   -99, 0x16,    0,    0,    0,    0, 0x12, 0x05,
+   -99, 0x04, 0x07, 0x07, 0x07, 0x07, 0x05,  -99,
+};
+const ObjectSpec boxesCenter[] = {
+  ObjectSpec { .pos = GridPos(2, 2), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(5, 2), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(2, 5), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(5, 5), .color = ObjectColor::Red },
+};
+const ObjectSpec targetsCenter[] = {
+  ObjectSpec { .pos = GridPos(3, 3), .color = ObjectColor::Red },
+  ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(3, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(4, 4), .color = ObjectColor::Green },
+};
+const ObjectSpec bubblesCenter[] = {
+  ObjectSpec { .pos = GridPos(4, 1), .color = ObjectColor::Yellow },
+  ObjectSpec { .pos = GridPos(2, 4), .color = ObjectColor::Blue },
+  ObjectSpec { .pos = GridPos(5, 4), .color = ObjectColor::Green },
+  ObjectSpec { .pos = GridPos(4, 6), .color = ObjectColor::Red },
+};
+
 const LevelSpec levels[numLevels] = {
   LevelSpec {
     .name = "Bubbles",
@@ -723,5 +752,17 @@ const LevelSpec levels[numLevels] = {
     .boxes = boxesSpiral,
     .targets = targetsSpiral,
     .bubbles = bubblesSpiral,
+  },
+  LevelSpec {
+    .name = "Center",
+    .grid = GridSpec { .w = 8, .h = 8, .tiles = tilesCenter },
+    .player = ObjectSpec { .pos = GridPos(4, 3), .color = ObjectColor::None },
+    .saveSlot = 18,
+    .numBoxes = 4,
+    .numTargets = 4,
+    .numBubbles = 4,
+    .boxes = boxesCenter,
+    .targets = targetsCenter,
+    .bubbles = bubblesCenter,
   },
 };
