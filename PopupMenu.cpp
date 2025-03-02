@@ -9,17 +9,19 @@
 #include "Music.h"
 #include "ProgressTracker.h"
 #include "SoundFx.h"
+#include "Utils.h"
 
 constexpr int numMenuOptions = 4;
 const char* menuOptions[numMenuOptions] = {
   "Help",
-  "Best scores",
+  "Move stats",
   "Music [   ]",
   "Credits",
 };
 const char* musicState[2] = { "off", "on" };
-constexpr int numCreditsText = 11;
+constexpr int numCreditsText = 12;
 const char* creditsText[numCreditsText] {
+  version,
   "(c)2025",
   "",
   "Concept",
@@ -92,7 +94,7 @@ void PopupMenu::update() {
 
   if (_showSubView) {
     _step++;
-    if (_step == 450 && _selectedItem == PopupMenuItem::Credits) {
+    if (_step == 460 && _selectedItem == PopupMenuItem::Credits) {
       _showSubView = false;
       hide();
     }
@@ -153,8 +155,8 @@ void PopupMenu::drawStats() {
   gb.display.fillRect(24, 9, 28, 49);
 
   gb.display.setColor(LIGHTBLUE);
-  gb.display.setCursor(30, 2);
-  gb.display.print("MOVES");
+  gb.display.setCursor(10, 2);
+  gb.display.print("Move statistics");
 
   gb.display.setColor(YELLOW);
   gb.display.setCursor(58, 58);
@@ -201,8 +203,8 @@ void PopupMenu::drawHelp() {
         bubbleImage.setFrame(col * 2);
         gb.display.drawImage(x + 18, y + 2, bubbleImage);
 
-        helpIconsImage.setFrame(2);
-        gb.display.drawImage(x + 25, y + 2, helpIconsImage);
+        helpIconsImage.setFrame(helpIconArrow);
+        gb.display.drawImage(x + 25, y + 1, helpIconsImage);
 
         gb.display.drawImage(x + 31, y, playerImage);
 
@@ -222,7 +224,11 @@ void PopupMenu::drawHelp() {
   gb.display.setCursor(3, 55);
   gb.display.print("Hold A");
   gb.display.setColor(GRAY);
-  gb.display.print(" = Retry/Quit");
+  gb.display.setCursor(39, 55);
+  gb.display.print("Retry/Quit");
+
+  helpIconsImage.setFrame(helpIconArrow);
+  gb.display.drawImage(30, 55, helpIconsImage);
 }
 
 void PopupMenu::drawPopup() {

@@ -4,7 +4,7 @@
 
 #define CALL_MEMBER_FN(object, ptrToMember)  ((object).*(ptrToMember))
 
-#define DEVELOPMENT
+//#define DEVELOPMENT
 
 class Scene {
 public:
@@ -13,6 +13,7 @@ public:
 };
 
 extern Scene* scene;
+extern const char* version;
 
 void assertFailed(const char *function, const char *file, int lineNo, const char *expression);
 

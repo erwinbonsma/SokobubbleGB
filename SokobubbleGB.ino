@@ -9,6 +9,8 @@
 #include "ProgressTracker.h"
 #include "Utils.h"
 
+const char* version = "v1.0 beta";
+
 Scene* scene;
 
 void draw() {
