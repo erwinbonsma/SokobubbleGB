@@ -2,6 +2,12 @@
 
 bool musicOn = false;
 
+void playMusic() {
+  if (!musicOn) {
+    toggleMusic();
+  }
+}
+
 void toggleMusic() {
   musicOn = !musicOn;
   if (musicOn) {

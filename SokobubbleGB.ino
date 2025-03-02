@@ -42,6 +42,8 @@ void setup() {
   game.level().init(progressTracker.getMaxLevelIndex());
   levelMenu.init();
   scene = &levelMenu;
+
+  playMusic();
 }
 
 void loop() {

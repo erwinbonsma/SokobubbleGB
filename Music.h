@@ -6,4 +6,5 @@ extern const Gamebuino_Meta::SongSpec* song;
 
 extern bool musicOn;
 
+void playMusic();
 void toggleMusic();
