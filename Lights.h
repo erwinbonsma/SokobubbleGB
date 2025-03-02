@@ -13,6 +13,9 @@ public:
    */
   void changeColor(ObjectColor color);
 
+  // Similar to changeColor, but without activation
+  void setColor(ObjectColor color);
+
   void update();
   void draw();
 };

@@ -281,9 +281,11 @@ bool Player::handleMoveInput() {
   if (gb.buttons.repeat(BUTTON_A, 0)) {
     if (_retryCount != -1 && ++_retryCount > 30) {
       _retryCount = 0; // Disable retry-drawing mode
+      _level.lights().setColor(ObjectColor::None);
       return false;
     }
   } else {
+    _level.lights().setColor(_bubble);
     _retryCount = 0;
   }
 
@@ -323,6 +325,10 @@ bool Player::update() {
   return true;
 }
 
+ObjectColor Player::retryBlinkColor() const {
+  return static_cast<ObjectColor>(1 + (_retryCount / 2) % 4);
+}
+
 void Player::draw(int x0, int y0) {
   int sector = (_rotation % 90 + 15) / 30;
   int orientation = (_rotation % 180) / 90;
@@ -335,15 +341,13 @@ void Player::draw(int x0, int y0) {
   }
   gb.display.drawImage(x0 + _pos.x, y0 + _pos.y, playerImage);
 
-  int palIdx;
-  if (_retryCount > 0) {
-    palIdx = 1 + (_retryCount / 2) % 4;
-  } else {
-    palIdx = static_cast<int>(_bubble);
-  }
-
-  cockpitImage.setFrame(palIdx);
+  ObjectColor cockpitColor = (_retryCount > 0) ? retryBlinkColor() : _bubble;
+  cockpitImage.setFrame(static_cast<int>(cockpitColor));
   gb.display.drawImage(x0 + _pos.x + 3, y0 + _pos.y + 3, cockpitImage);
+
+  if (_retryCount > 0) {
+    _level.lights().setColor(cockpitColor);
+  }
 }
 
 void Box::init(GridPos pos, ObjectColor color) {

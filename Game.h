@@ -142,6 +142,8 @@ class Player : public Moveable {
   // Returns true when game play should continue
   bool handleMoveInput();
 
+  ObjectColor retryBlinkColor() const;
+
 public:
   Player(Level& level) : _level(level) {}
 

@@ -36,9 +36,11 @@ inline uint8_t scaleChannel(uint8_t channelVal, int activation) {
 
 void Lights::changeColor(ObjectColor color) {
   _activeColor = color;
-
-  // Ignored for None and Any, but no harm in setting it
   _activation = maxActivation;
+}
+
+void Lights::setColor(ObjectColor color) {
+  _activeColor = color;
 }
 
 void Lights::update() {
