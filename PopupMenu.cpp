@@ -80,11 +80,11 @@ void PopupMenu::update() {
     } else {
       hide();
     }
-  } else if (gb.buttons.pressed(BUTTON_UP)) {
+  } else if (!_showSubView && gb.buttons.pressed(BUTTON_UP)) {
     _selectedItem = static_cast<PopupMenuItem>(
       (static_cast<int>(_selectedItem) + numMenuOptions - 1) % numMenuOptions
     );
-  } else if (gb.buttons.pressed(BUTTON_DOWN)) {
+  } else if (!_showSubView && gb.buttons.pressed(BUTTON_DOWN)) {
     _selectedItem = static_cast<PopupMenuItem>(
       (static_cast<int>(_selectedItem) + 1) % numMenuOptions
     );
