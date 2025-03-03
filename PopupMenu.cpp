@@ -191,11 +191,11 @@ void PopupMenu::drawHelp() {
         gb.display.drawImage(x + 8, y, playerImage);
 
         if (row != 0) {
-          cockpitImage.setFrame(1 + (((row == 2) + col) % 2) * 2);
+          cockpitImage.setFrame(1 + (row == 2) * 2);
           gb.display.drawImage(x + 11, y + 3, cockpitImage);
         }
       } else {
-        int idx = (col == 0 ? row * 4 : row * 2 + 2) % 6;
+        int idx = (row * 2 + 4) % 6;
         targetImage.setFrame(idx);
         gb.display.drawImage(x + 16, y, targetImage);
       }
@@ -211,7 +211,7 @@ void PopupMenu::drawHelp() {
         cockpitImage.setFrame(1 + col * 2);
         gb.display.drawImage(x + 34, y + 3, cockpitImage);
       } else {
-        helpIconsImage.setFrame(row % 3 / 2);
+        helpIconsImage.setFrame((row + col) % 3 / 2);
         gb.display.drawImage(x + 25, y + 1, helpIconsImage);
 
         boxImage.setFrame(col * 4);
