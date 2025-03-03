@@ -27,9 +27,11 @@ void update() {
 
   scene->update();
 
+#ifdef DEVELOPMENT
   if (gb.buttons.pressed(BUTTON_B)) {
     toggleMusic();
   }
+#endif
 }
 
 void setup() {
