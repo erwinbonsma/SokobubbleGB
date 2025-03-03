@@ -44,13 +44,21 @@ void Lights::setColor(ObjectColor color) {
 }
 
 void Lights::update() {
+  _updateInvokedSinceLastDraw = true;
+
   if (_activation > 0) {
     _activation--;
   }
 }
 
 void Lights::draw() {
-  if (_activeColor == ObjectColor::None) {
+  if (
+    _activeColor == ObjectColor::None
+    // Do not show lights when update was not invoked. This way the lights are
+    // off when the pop-up menu is shown and automatically turn on again when
+    // the menu is hidden
+    || !_updateInvokedSinceLastDraw
+  ) {
     gb.lights.clear(BLACK);
     return;
   }
@@ -77,4 +85,5 @@ void Lights::draw() {
 
     gb.lights.drawPixel(x, y, color);
   }
+  _updateInvokedSinceLastDraw = false;
 }

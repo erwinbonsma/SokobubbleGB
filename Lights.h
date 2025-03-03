@@ -5,6 +5,7 @@
 class Lights {
   ObjectColor _activeColor = ObjectColor::None;
   int _activation;
+  bool _updateInvokedSinceLastDraw;
 
 public:
   /* None -> No lights
