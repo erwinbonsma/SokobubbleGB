@@ -182,7 +182,7 @@ void PopupMenu::drawStats() {
 void PopupMenu::drawHelp() {
   gb.display.clear(DARKGRAY);
 
-  playerImage.setFrame(5);
+  playerImage.setFrame(7 - (gb.frameCount / 16) % 3);
   for (int row = 0; row < 6; ++row) {
     int y = row * 8 + 3;
     for (int col = 0; col < 2; ++col) {
