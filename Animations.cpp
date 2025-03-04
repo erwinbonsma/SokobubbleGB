@@ -2,6 +2,10 @@
 
 #include <Gamebuino-Meta.h>
 
+#undef min
+#undef max
+#include <algorithm>
+
 #include "LevelMenu.h"
 #include "Lights.h"
 #include "ProgressTracker.h"
@@ -24,6 +28,11 @@ int ease(int x, int range) {
 void LevelDoneAnimation::init(Lights* lights) {
   _lights = lights;
   _step = 0;
+
+  // Initial hi-score countdown speed
+  _updateHiDelay = 12 * 8;
+  // Tick when to start countdown of hi-score
+  _nextUpdateHi = 130 + _updateHiDelay / 8;
 }
 
 Animation* LevelDoneAnimation::update() {
@@ -47,7 +56,7 @@ Animation* LevelDoneAnimation::update() {
     } else {
       done = true;
     }
-  } else if (_step == 140) {
+  } else if (_step >= _nextUpdateHi) {
     auto& level = game.level();
 
     if (level.getBestMoveCount() <= level.getMoveCount()) {
@@ -55,7 +64,13 @@ Animation* LevelDoneAnimation::update() {
     } else {
       level.decBestMoveCount();
       gb.sound.fx(pushStartSfx);
-      _step = 130;
+      if (level.getBestMoveCount() <= level.getMoveCount()) {
+        // Wait a bit after score settled before moving to next level
+        _nextUpdateHi = _step + 60;
+      } else {
+        _updateHiDelay = std::max(8, _updateHiDelay - 1);
+        _nextUpdateHi = _step + _updateHiDelay / 8;
+      }
     }
   }
 

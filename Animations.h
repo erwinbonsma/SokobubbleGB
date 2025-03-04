@@ -15,7 +15,9 @@ public:
 
 class LevelDoneAnimation : public Animation {
   Lights* _lights;
-  int _step;
+  uint16_t _step;
+  uint16_t _updateHiDelay;
+  uint16_t _nextUpdateHi;
 
 public:
   void init(Lights* lights);
